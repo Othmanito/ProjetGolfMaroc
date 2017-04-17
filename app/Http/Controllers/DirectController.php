@@ -23,22 +23,4 @@ class DirectController extends Controller
     return view('Espace_Direct.dashboard');
   }
 
-
-
-
-
-  /*****************************************************************************
-  Lister Stocks
-  *****************************************************************************/
-  public function listerStocks($p_id_magasin)
-  {
-    $data = Stock::where('id_magasin', $p_id_magasin)->get();
-    if($data->isEmpty())
-      return redirect()->back()->withInput()->with('alert_warning','No stock in that Shop.');
-
-    else
-      return view('Espace_Direct.liste-stocks')->with('data',$data);
-  }
-
-
 }

@@ -1,4 +1,4 @@
-<?php $__env->startSection('title'); ?> Liste des ventes  <?php $__env->stopSection(); ?>
+<?php $__env->startSection('title'); ?> Stock du magasin  <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('styles'); ?>
 <link href="<?php echo e(asset('css/bootstrap.css')); ?>" rel="stylesheet">
@@ -27,9 +27,6 @@
             });
         });
     });
-    $(document).ready(function(){
-        $('[data-toggle="popover"]').popover();
-    });
 </script>
 <?php $__env->stopSection(); ?>
 
@@ -37,12 +34,10 @@
 <div class="container-fluid">
   <!-- main row -->
   <div class="row">
-    <h1 class="page-header">Ventes du magasin<strong></strong> <small> </small></h1>
-    <!-- row -->
-    <div class="row">
+    <h1 class="page-header">Stock du magasin <strong><?php echo e(getChamp('magasins','id_magasin',$data->first()->id_magasin, 'libelle')); ?></strong> <small> </small></h1>
 
-      
-      <div class="row">
+    
+    <div class="row">
         <div class="col-lg-2"></div>
 
         <div class="col-lg-8">
@@ -79,65 +74,57 @@
 
         <div class="col-lg-2"></div>
       </div>
-      
+    
 
-      <div class="table-responsive">
-	       <table class="table table-striped table-bordered table-hover" id="example">
+    <div class="table-responsive">
+	    <table id="example" class="table table-striped table-bordered table-hover">
 
-           <thead bgcolor="#DBDAD8">
-             <tr><th width="2%"> # </th><th>Article</th><th>Prix de vente</th><th>Quantité</th><th>Total HT</th></tr>
-           </thead>
+        <thead bgcolor="#DBDAD8">
+          <tr><th width="2%"> # </th><th> Article </th><th>Quantite</th></tr>
+        </thead>
+        <tfoot bgcolor="#DBDAD8">
+          <tr><th id="i1" width="2%"> # </th><th> Article </th><th>Quantite</th></tr>
+        </tfoot>
 
-           <tfoot bgcolor="#DBDAD8">
-             <tr><th width="2%"> # </th><th>Article</th><th>Prix de vente</th><th>Quantité</th><th>Total HT</th></tr>
-           </tfoot>
+        <tbody>
+          <?php if( isset( $data ) ): ?>
+          <?php if( $data->isEmpty() ): ?>
+          <tr><td colspan="4">Aucun Stock</td></tr>
+          <?php else: ?>
+          <?php $__currentLoopData = $data; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+          <tr>
+          <td><?php echo e($loop->index+1); ?></td>
+          <td><?php echo e(getChamp('articles','id_article',$item->id_article, 'designation_c')); ?></td>
+          <td <?php echo e($item->quantite<=$item->quantite_min ? 'bgcolor="red"' : ''); ?>> <?php echo e($item->quantite); ?></td>
+          <td>
+          <a href="<?php echo e(Route('direct.info',['p_table'=> 'magasins' , 'p_id' => $item->id_magasin  ])); ?>" title="detail"><i class="glyphicon glyphicon-eye-open"></i></a>
+          </td>
+          </tr>
+          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+          <?php endif; ?>
+          <?php endif; ?>
 
-           <tbody>
-             <?php if( isset( $data ) ): ?>
-             <?php if( $data->isEmpty() ): ?>
-             <tr><td colspan="4">Aucune vente</td></tr>
-             <?php else: ?>
-             <?php $__currentLoopData = $data; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-             <tr class="odd gradeA">
-               <td><?php echo e($loop->index+1); ?></td>
-               <td><?php echo e(getChamp('articles','id_article',$item->id_article, 'designation_c')); ?></td>
-               <td><?php echo e(getChamp('articles','id_article',$item->id_article, 'prix_vente')); ?> DH</td>
-               <td><?php echo e($item->quantite); ?></td>
-               <td><?php echo e(getChamp('articles','id_article',$item->id_article, 'prix_vente') * $item->quantite); ?> DH</td>
+        </tbody>
+      </table>
+      </div>
 
-
-               <!--<td>
-                 <a href="#" title="detail"><i class="glyphicon glyphicon-eye-open"></i></a>
-                 <a href="#" title="modifier"><i class="glyphicon glyphicon-pencil"></i></a>
-                 <a onclick="return confirm('Êtes-vous sure de vouloir effacer cette transaction de vente: ?')" href="#" title="supprimer"><i class="glyphicon glyphicon-trash"></i></a>
-               </td>-->
-             </tr>
-             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-             <?php endif; ?>
-             <?php endif; ?>
-
-           </tbody>
-         </table>
-       </div>
-
-     </div>
-    <!-- row -->
 
 
       <!-- row -->
       <div class="row">
         <div class="col-lg-4"></div>
         <div class="col-lg-8">
-          <a onclick="return alert('Printing ....')" type="button" class="btn btn-outline btn-primary"><i class="fa fa-file-pdf-o" aria-hidden="true">  Imprimer </i></a>
+        <a onclick="return alert('Printing ....')" type="button" class="btn btn-outline btn-primary"><i class="fa fa-file-pdf-o" aria-hidden="true">  Imprimer </i></a>
         </div>
       </div>
       <!-- row -->
 
-    </div>
-    <!-- end main row -->
+  </div>
+  <!-- end main row -->
 
 </div>
 <?php $__env->stopSection(); ?>
+
 
 <?php $__env->startSection('menu_1'); ?>
 	<?php echo $__env->make('Espace_Vendeur._nav_menu_1', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

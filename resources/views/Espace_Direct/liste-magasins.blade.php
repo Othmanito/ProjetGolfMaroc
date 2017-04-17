@@ -9,21 +9,29 @@
 @endsection
 
 @section('scripts')
-<script src="{{  asset('js/jquery.js') }}"></script>
-<script src="{{  asset('js/bootstrap.js') }}"></script>
-
-<script src="{{  asset('table/jquery.js') }}"></script>
-<script src="{{  asset('table/jquery.dataTables.js') }}"></script>
-<script src="{{  asset('table/dataTables.bootstrap.js') }}"></script>
-
-<script>
+<script src="{{  asset('table2/datatables.min.js') }}"></script>
+<script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
-        $('#dataTables-example').DataTable({
-            responsive: true
+        // Setup - add a text input to each footer cell
+        $('#example tfoot th').each(function() {
+            var title = $(this).text();
+            $(this).html('<input type="text" size="10" class="form-control" placeholder="Rechercher par ' + title + '" />');
+        });
+        // DataTable
+        var table = $('#example').DataTable();
+        // Apply the search
+        table.columns().every(function() {
+            var that = this;
+            $('input', this.footer()).on('keyup change', function() {
+                if (that.search() !== this.value) {
+                    that.search(this.value).draw();
+                }
+            });
         });
     });
 </script>
 @endsection
+
 @section('main_content')
 <!-- Container -->
 <div class="container-fluid">
@@ -67,7 +75,7 @@
         <div class="row">
             <div class="table-responsive">
                 <div class="col-lg-12">
-                    <table id="dataTables-example" class="table table-striped table-bordered table-hover" width="100%">
+                    <table id="example" class="table table-striped table-bordered table-hover" width="100%">
                       <thead bgcolor="#DBDAD8">
                           <tr>
                               <th width="2%"> # </th>
@@ -104,9 +112,7 @@
                                   <a onclick="return confirm('Êtes-vous sure de vouloir effacer le magasin: {{ $item->libelle }} ?')" href="{{ Route('direct.delete',['p_table' => 'magasins' , 'p_id' => $item->id_magasin ]) }}" title="supprimer"><i class="glyphicon glyphicon-trash"></i></a>
                               </td>
                           </tr>
-                          @endforeach
-                          @endif
-                          @endif
+                          @endforeach @endif @endif
 
                       </tbody>
                     </table>

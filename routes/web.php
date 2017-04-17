@@ -25,45 +25,6 @@ use Illuminate\Support\Facades\Input;
 Route::get('/', function () {
     return view('welcome');
 });
-/*
-Route::get('/proc', function () {
-  dump( DB::select("SELECT hello('aaaa') as rep; ") );
-  echo '<hr>';
-  dump( DB::select("call getArticlesForStock(1); ") );
-  echo '<hr>';
-    $id = 1;
-    $data =  DB::select("select * from articles where id_article not in (select id_article from stocks where id_magasin=".$id.")");
-
-    foreach( $data as $item )
-    {
-      echo $item->id_article." ".$item->designation_c." ".$item->couleur." ".$item->prix_achat." ".$item->prix_vente."<br>";
-    }
-    echo '<hr>';
-    //dump( DB::select("SELECT getArticlesForStock(2) ") );
-});
-
-/*
-
-Route::get('/form', function () {
-    return view('form')->with('articles', Article::all() );
-});
-
-Route::get('/t', function () {
-
-  //$v = Input::get("aa");
-  //$data = DB::select( DB::raw("SELECT * FROM stocks s join articles a on s.id_article=a.id_article ") );
-  //$data = DB::statement('select * from users where id_role=:id', array('id' => 1) );
-
-  return view('table')->withData( Categorie::all() );
-
-});
-
-*/
-
-
-//Route pour generer des PDF
-//Route::get('print/{param}','PDFController@imprimer')->name('print');
-
 
 /***************************************
 Routes Excel:
@@ -114,9 +75,11 @@ Route::get('/direct/lister/{p_table}','ShowController@lister')->name('direct.lis
 Routes gestion des Stocks
 *****************************************/
 Route::get('/direct/addStock/{p_id_magasin}','StockController@addStock')->name('direct.addStock');
-Route::get('/stocks/{p_id_magasin}','DirectController@listerStocks')->name('direct.stocks');
-
+Route::post('/direct/submitAddStock','StockController@submitAddStock')->name('direct.submitAddStock');
 /*******************************************************************************/
+
+
+
 Route::prefix('/admin')->group( function()
 {
   //home --> Dashboard
@@ -133,22 +96,39 @@ Route::prefix('/direct')->group( function()
 
 
   //lister stocks
+  Route::get('/stocks/{p_id_magasin}','StockController@listerStocks')->name('direct.stocks');
 
   Route::get('/update/{value}/{aa}','DirectController@routeError');
   Route::get('/update','DirectController@routeError');
 });
 
 
-/*****************************************************************************************************************
-                                              Routes de Espace vente
-*******************************************************************************************************************/
+/*********************************************************************************************
+                            Routes de l'espace Vendeur
+**********************************************************************************************/
+
 Route::prefix('/vendeur')->group( function()
 {
   //home --> Dashboard
   Route::get('/','VendeurController@home')->name('vendeur.home');
-  Route::get('/vendeur/lister/{p_table}','VendeurController@lister')->name('vendeur.lister');
-  Route::get('/vendeur/addVente/{p_id_trans_art}','VendeurController@addFormVente')->name('vendeur.addVente');
+  //Lister les ventes,les promotions et le stock d'un magasin
+  Route::get('/Lister/{p_table}/{p_id_user}','VendeurController@lister')->name('vendeur.lister');
+
+//Visualiser les details de la transaction
+  Route::get('/details/{p_id}','VendeurController@detailTrans')->name('vendeur.details');
+
+
+  //Route::get('/lister/{p_table}','VendeurController@lister')->name('vendeur.lister');
+  //Afficher le formulaire d'Ajout de vente
+  Route::get('/vendeur/addFormVente/{p_id_trans}','VendeurController@addFormVente')->name('vendeur.addVente');
+  //Valider l'ajout de la vente
+  Route::post('/vendeur/submitAddVente','VendeurController@submitAddVente')->name('vendeur.submitAddVente');
 
 
 
-  });
+
+
+
+
+
+});

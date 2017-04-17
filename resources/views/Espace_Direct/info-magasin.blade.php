@@ -14,6 +14,11 @@
 
 <script src="{{  asset('table/jquery.dataTables.js') }}"></script>
 <script src="{{  asset('table/dataTables.bootstrap.js') }}"></script>
+<script>
+$(document).ready(function(){
+		$('[data-toggle="popover"]').popover();
+});
+</script>
 @endsection
 
 @section('main_content')
@@ -24,10 +29,11 @@
 
 		<div id="page-wrapper">
 
+			{{-- Debut Alerts --}}
 			<div class="row">
 				<div class="col-lg-2"></div>
 				<div class="col-lg-8">
-				{{-- Debut Alerts --}}
+
 				@if (session('alert_success'))
 				<div class="alert alert-success alert-dismissable">
 					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> {!! session('alert_success') !!}
@@ -51,13 +57,14 @@
 					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> {!! session('alert_danger') !!}
 				</div>
 				@endif
-				{{-- Fin Alerts --}}
+				</div>
+				<div class="col-lg-2"></div>
 			</div>
-			<div class="col-lg-2"></div>
-
-			</div>
+			{{-- Fin Alerts --}}
 
 			<div class="container-fluid">
+
+
 				<div class="col-lg-1"></div>
 				<div class="col-lg-10">
 
@@ -134,7 +141,7 @@
 
 			<div class="row">
 				<div class="col-lg-1"></div>
-			<div class="col-lg-10">
+				<div class="col-lg-10">
 
 					<div class="panel panel-default">
 						<!-- Default panel contents -->
@@ -148,36 +155,87 @@
 
 							{{-- Table --}}
 		          <div class="col-lg-12">
-							 <table class="table table-bordered table-hover table-striped" id="dataTables-example">
+								<table class="table table-bordered table-hover table-striped" id="dataTables-example">
 
-								 <thead>
-									 <tr><th width="2%"> # </th><th> Article </th><th>Quantite</th><th width="10%">Autres</th></tr>
-								 </thead>
+								<thead>
+									<tr><th width="2%"> # </th><th> Article </th><th width="15%">Quantite</th><th width="50%">Etat</th></tr>
+								</thead>
 
-								 <tbody>
-									 @if ( isset( $stocks ) )
-									 @if( $stocks->isEmpty() )
-									 <tr><td colspan="4">le stock de ce magasin est vide, appuyez sur le bouton en bas de la page pour lui ajouter des articles</td></tr>
-									 @else
-									 @foreach( $stocks as $item )
-									 <tr class="odd gradeA">
-										 <td>{{ $loop->index+1 }}</td>
-										 <td>{{ getChamp('articles','id_article',$item->id_article, 'designation_c') }}</td>
-										 <td {{ $item->quantite<=$item->quantite_min ? 'bgcolor="red"' : '' }}> {{ $item->quantite }}</td>
-										 <td>
-											 <a href="{{ Route('direct.info',['p_table'=> 'magasins' , 'p_id' => $item->id_magasin  ]) }}" title="detail"><i class="glyphicon glyphicon-eye-open"></i></a>
-											 <a href="{{ Route('direct.updateForm',['p_table'=> 'magasins' , 'p_id' => $item->id_magasin  ]) }}" title="modifier"><i class="glyphicon glyphicon-pencil"></i></a>
-											 <a onclick="return confirm('Êtes-vous sure de vouloir effacer le magasin: {{ $item->libelle }} ?')" href="{{ Route('direct.delete',['p_table' => 'magasins' , 'p_id' => $item->id_magasin ]) }}" title="supprimer"><i class="glyphicon glyphicon-trash"></i></a>
-										 </td>
-									 </tr>
-									 @endforeach
-									 @endif
-									 @endif
+								<tbody>
+									@if ( isset( $stocks ) )
+										@if( $stocks->isEmpty() )
+											<tr><td colspan="4">le stock de ce magasin est vide, appuyez sur le bouton en bas de la page pour lui ajouter des articles</td></tr>
+										@else
 
-								 </tbody>
+										{{-- boucle sur les elements du stock --}}
+										@foreach( $stocks as $item )
+
+										{{-- Tests pour definir la couleur de la ligne --}}
+										@if( $item->quantite > $item->quantite_min )
+										<tr class="success">
+										@endif
+										@if( $item->quantite < $item->quantite_min )
+										<tr class="danger">
+										@endif
+										@if( $item->quantite == $item->quantite_min )
+										<tr class="warning">
+										@endif
+										{{-- fin Tests pour definir la couleur de la ligne --}}
+
+										<td>{{ $loop->index+1 }}</td>
+										<td>{{ getChamp("articles", "id_article",  $item->id_article , "designation_c") }}</td>
+										<!--td>{{ $item->quantite_min }} | {{ $item->quantite }} | {{ $item->quantite_max }}</td-->
+
+										<td> {{ $item->quantite }} unités ({{ ($item->quantite / $item->quantite_max)*100 }}%) </td>
+
+										<td>
+											<div class="progress">
+												<div class="progress-bar progress-bar-danger progress-bar-striped" style="width: {{ 100*($item->quantite_min/$item->quantite_max) }}%"></div>
+												<div class="progress-bar progress-bar-success progress-bar-striped" style="width: {{ 100*($item->quantite/$item->quantite_max) }}%"></div>
+											</div>
+										</td>
+										<td><button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal{{ $loop->index+1 }}">Detail</button></td>
+
+										{{-- Modal (pour afficher les details de chaque article) --}}
+										<div class="modal fade" id="myModal{{ $loop->index+1 }}" role="dialog">
+												<div class="modal-dialog modal-sm">
+													<div class="modal-content">
+														<div class="modal-header">
+															<button type="button" class="close" data-dismiss="modal">&times;</button>
+															<h4 class="modal-title">{{ getChamp("articles", "id_article",  $item->id_article , "designation_c")  }}</h4>
+														</div>
+														<div class="modal-body">
+															<p><b>Quantité </b> {{ $item->quantite }} </p>
+															<p><b>Quantité Min</b> {{ $item->quantite_min }} </p>
+															<p><b>Quantité Max</b> {{ $item->quantite_max }} </p>
+															<hr>
+															<p><b>numero</b> {{ getChamp("articles", "id_article",  $item->id_article , "num_article")  }}</p>
+															<p><b>code a barres</b> {{ getChamp("articles", "id_article",  $item->id_article , "code_barre")  }}</p>
+															<p><b>Taille</b> {{ getChamp("articles", "id_article",  $item->id_article , "taille")  }}</p>
+															<p><b>Couleur</b> {{ getChamp("articles", "id_article",  $item->id_article , "couleur")  }}</p>
+															<p><b>sexe</b> {{ getSexeName(getChamp("articles", "id_article",  $item->id_article , "sexe") ) }}</p>
+															<p><b>Prix d'achat</b> {{ getChamp("articles", "id_article",  $item->id_article , "prix_achat")  }}</p>
+															<p><b>Prix de vente</b> {{ getChamp("articles", "id_article",  $item->id_article , "prix_vente")  }}</p>
+															<p>{{ getChamp("articles", "id_article",  $item->id_article , "designation_l")  }}</p>
+														</div>
+														<div class="modal-footer">
+															<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+														</div>
+													</div>
+												</div>
+											</div>
+										{{-- fin Modal (pour afficher les details de chaque article) --}}
+
+									</tr>
+
+									@endforeach
+									{{-- fin boucle sur les elements du stock --}}
+									@endif
+									@endif
+
+
+								</tbody>
 							 </table>
-
-
 						 </div>
 						</div>
 						 {{-- Fin Table de: Stock --}}

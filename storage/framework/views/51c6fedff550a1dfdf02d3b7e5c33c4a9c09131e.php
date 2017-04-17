@@ -1,4 +1,4 @@
-<?php $__env->startSection('title'); ?> Liste des ventes  <?php $__env->stopSection(); ?>
+<?php $__env->startSection('title'); ?> Liste des transactions  <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('styles'); ?>
 <link href="<?php echo e(asset('css/bootstrap.css')); ?>" rel="stylesheet">
@@ -37,7 +37,7 @@
 <div class="container-fluid">
   <!-- main row -->
   <div class="row">
-    <h1 class="page-header">Ventes du magasin<strong></strong> <small> </small></h1>
+    <h1 class="page-header">Liste des Transactions<strong></strong> <small> </small></h1>
     <!-- row -->
     <div class="row">
 
@@ -85,32 +85,28 @@
 	       <table class="table table-striped table-bordered table-hover" id="example">
 
            <thead bgcolor="#DBDAD8">
-             <tr><th width="2%"> # </th><th>Article</th><th>Prix de vente</th><th>Quantité</th><th>Total HT</th></tr>
+             <tr><th width="2%"> # </th><th>Type de Transaction</th><th>Date de Transaction</th><th width="10%">Autres</th></tr>
            </thead>
 
            <tfoot bgcolor="#DBDAD8">
-             <tr><th width="2%"> # </th><th>Article</th><th>Prix de vente</th><th>Quantité</th><th>Total HT</th></tr>
+             <tr><th width="2%"> # </th><th>Type de Transaction</th><th>Date de transaction</th><th width="10%">Autres</th></tr>
            </tfoot>
 
            <tbody>
              <?php if( isset( $data ) ): ?>
              <?php if( $data->isEmpty() ): ?>
-             <tr><td colspan="4">Aucune vente</td></tr>
+             <tr><td colspan="4">Aucune transaction</td></tr>
              <?php else: ?>
              <?php $__currentLoopData = $data; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
              <tr class="odd gradeA">
                <td><?php echo e($loop->index+1); ?></td>
-               <td><?php echo e(getChamp('articles','id_article',$item->id_article, 'designation_c')); ?></td>
-               <td><?php echo e(getChamp('articles','id_article',$item->id_article, 'prix_vente')); ?> DH</td>
-               <td><?php echo e($item->quantite); ?></td>
-               <td><?php echo e(getChamp('articles','id_article',$item->id_article, 'prix_vente') * $item->quantite); ?> DH</td>
+               <td><?php echo e(getChamp('type_transaction','id_typeTrans',$item->id_typeTrans, 'libelle')); ?></td>
+               <td><?php echo e(getDateHelper($item->created_at)); ?> </td>
 
-
-               <!--<td>
-                 <a href="#" title="detail"><i class="glyphicon glyphicon-eye-open"></i></a>
-                 <a href="#" title="modifier"><i class="glyphicon glyphicon-pencil"></i></a>
-                 <a onclick="return confirm('Êtes-vous sure de vouloir effacer cette transaction de vente: ?')" href="#" title="supprimer"><i class="glyphicon glyphicon-trash"></i></a>
-               </td>-->
+               <td>
+                 <a href="<?php echo e(Route('vendeur.details',['p_id' => $item->id_transaction  ])); ?>" title="detail"><i class="glyphicon glyphicon-eye-open"></i></a>
+                 <!--<a onclick="return confirm('Êtes-vous sure de vouloir effacer cette transaction de vente: ?')" href="#" title="supprimer"><i class="glyphicon glyphicon-trash"></i></a>-->
+               </td>
              </tr>
              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
              <?php endif; ?>
@@ -128,7 +124,7 @@
       <div class="row">
         <div class="col-lg-4"></div>
         <div class="col-lg-8">
-          <a onclick="return alert('Printing ....')" type="button" class="btn btn-outline btn-primary"><i class="fa fa-file-pdf-o" aria-hidden="true">  Imprimer </i></a>
+          <a onclick="return alert('Printing ....')" type="button" class="btn btn-outline btn-default"><i class="fa fa-file-pdf-o" aria-hidden="true">  Imprimer </i></a>
         </div>
       </div>
       <!-- row -->

@@ -77,13 +77,13 @@
           <div class="table-responsive">
             <div class="col-lg-12">
               {{-- *************** form ***************** --}}
-              <form role="form" method="post" action="{{ Route('direct.submitAdd',['param' => 'stock']) }}">
+              <form role="form" method="post" action="{{ Route('direct.submitAddStock') }}">
                 {{ csrf_field() }}
                 <input type="hidden" name="id_magasin" value="{{ $magasin->id_magasin }}" />
                 <table id="example" class="table table-striped table-bordered table-hover">
                   <thead bgcolor="#DBDAD8">
                       <tr>
-                          <th width="1%"> # </th>
+                          <th width="1%">#</th>
                           <th>Article</th>
                           <th>Categorie</th>
                           <th>Fournisseur</th>
@@ -95,7 +95,7 @@
                   </thead>
                   <tfoot bgcolor="#DBDAD8">
                       <tr>
-                          <th width="1%"> # </th>
+                          <th width="1%">#</th>
                           <th>Article</th>
                           <th>Categorie</th>
                           <th>Fournisseur</th>
@@ -108,26 +108,26 @@
                   <tbody>
                     @if ( isset( $articles ) )
                     @if( $articles->isEmpty() )
-                    <tr>
-                      <td colspan="5" align="center">Aucun Article</td>
-                    </tr>
+                      {{ Redirect::to()->back() }}
                     @else
                     @foreach( $articles as $item )
                     <tr>
-                        <input type="hidden" name="id_article[{{ $loop->index+1 }}]" value="{{ $item->id_article }}">
-                        <td>{{ $loop->index+1 }}</td>
-                        <td>{{ $item->designation_c }}</td>
-                        <td>{{ getChamp('categories', 'id_categorie', $item->id_categorie, 'libelle') }}</td>
-                        <td>{{ getChamp('fournisseurs', 'id_fournisseur', $item->id_fournisseur, 'libelle') }}</td>
-                        <td><input type="number" min="0" placeholder="Quantite"     name="quantite[{{ $loop->index+1 }}]"></td>
-                        <td><input type="number" min="0" placeholder="Quantite Min" name="quantite_min[{{ $loop->index+1 }}]" value="{{ old('quantite_min[$loop->index+1]') }}"></td>
-                        <td><input type="number" min="0" placeholder="Quantite Max" name="quantite_max[{{ $loop->index+1 }}]" value="{{ old('quantite_max[$loop->index+1]') }}"></td>
-                        <td>
-                            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal{{ $loop->index+1 }}">Detail Article</button>
-                        </td>
+                      <input type="hidden" name="id_article[{{ $loop->index+1 }}]"    value="{{ $item->id_article }}">
+                      <input type="hidden" name="designation_c[{{ $loop->index+1 }}]" value="{{ $item->designation_c }}" />
 
-                        {{-- Modal (pour afficher les details de chaque article) --}}
-                        <div class="modal fade" id="myModal{{ $loop->index+1 }}" role="dialog">
+                      <td>{{ $loop->index+1 }}</td>
+                      <td>{{ $item->designation_c }}</td>
+                      <td>{{ getChamp('categories', 'id_categorie', $item->id_categorie, 'libelle') }}</td>
+                      <td>{{ getChamp('fournisseurs', 'id_fournisseur', $item->id_fournisseur, 'libelle') }}</td>
+                      <td><input type="number" min="0" placeholder="Quantite"     name="quantite[{{ $loop->index+1 }}]"></td>
+                      <td><input type="number" min="0" placeholder="Quantite Min" name="quantite_min[{{ $loop->index+1 }}]" value="{{ old('quantite_min[$loop->index+1]') }}"></td>
+                      <td><input type="number" min="0" placeholder="Quantite Max" name="quantite_max[{{ $loop->index+1 }}]" value="{{ old('quantite_max[$loop->index+1]') }}"></td>
+                      <td>
+                          <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal{{ $loop->index+1 }}">Detail Article</button>
+                      </td>
+
+                      {{-- Modal (pour afficher les details de chaque article) --}}
+                      <div class="modal fade" id="myModal{{ $loop->index+1 }}" role="dialog">
                           <div class="modal-dialog modal-sm">
                             <div class="modal-content">
                               <div class="modal-header">
@@ -150,17 +150,19 @@
                             </div>
                           </div>
                         </div>
-                        {{-- fin Modal (pour afficher les details de chaque article) --}}
+                      {{-- fin Modal (pour afficher les details de chaque article) --}}
 
                     </tr>
                     @endforeach
                     @endif
                     @endif
                   </tbody>
-
+                  <tr>
+                    <td colspan="8" align="center">
+                      <button data-toggle="popover" data-placement="top" data-trigger="hover" title="Valider l'ajout" data-content="Cliquez" type="submit" name="submit" value="valider" class="btn btn-default">Valider</button>
+                    </td>
+                  </tr>
                 </table>
-                <center><button data-toggle="popover" data-placement="top" data-trigger="hover" title="Valider l'ajout" data-content="Cliquez" type="submit" name="submit" value="valider" class="btn btn-default">Valider la vente</button></center>
-
               </form>
               {{-- *************** end form ***************** --}}
             </div>

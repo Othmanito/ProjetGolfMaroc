@@ -1,6 +1,6 @@
 @extends('layouts.main_master')
 
-@section('title') Liste des ventes  @endsection
+@section('title') Stock du magasin  @endsection
 
 @section('styles')
 <link href="{{  asset('css/bootstrap.css') }}" rel="stylesheet">
@@ -29,9 +29,6 @@
             });
         });
     });
-    $(document).ready(function(){
-        $('[data-toggle="popover"]').popover();
-    });
 </script>
 @endsection
 
@@ -39,12 +36,10 @@
 <div class="container-fluid">
   <!-- main row -->
   <div class="row">
-    <h1 class="page-header">Ventes du magasin<strong></strong> <small> </small></h1>
-    <!-- row -->
-    <div class="row">
+    <h1 class="page-header">Stock du magasin <strong>{{ getChamp('magasins','id_magasin',$data->first()->id_magasin, 'libelle')  }}</strong> <small> </small></h1>
 
-      {{-- **************Alerts**************  --}}
-      <div class="row">
+    {{-- **************Alerts**************  --}}
+    <div class="row">
         <div class="col-lg-2"></div>
 
         <div class="col-lg-8">
@@ -77,65 +72,57 @@
 
         <div class="col-lg-2"></div>
       </div>
-      {{-- **************endAlerts**************  --}}
+    {{-- **************endAlerts**************  --}}
 
-      <div class="table-responsive">
-	       <table class="table table-striped table-bordered table-hover" id="example">
+    <div class="table-responsive">
+	    <table id="example" class="table table-striped table-bordered table-hover">
 
-           <thead bgcolor="#DBDAD8">
-             <tr><th width="2%"> # </th><th>Article</th><th>Prix de vente</th><th>Quantité</th><th>Total HT</th></tr>
-           </thead>
+        <thead bgcolor="#DBDAD8">
+          <tr><th width="2%"> # </th><th> Article </th><th>Quantite</th></tr>
+        </thead>
+        <tfoot bgcolor="#DBDAD8">
+          <tr><th id="i1" width="2%"> # </th><th> Article </th><th>Quantite</th></tr>
+        </tfoot>
 
-           <tfoot bgcolor="#DBDAD8">
-             <tr><th width="2%"> # </th><th>Article</th><th>Prix de vente</th><th>Quantité</th><th>Total HT</th></tr>
-           </tfoot>
+        <tbody>
+          @if ( isset( $data ) )
+          @if( $data->isEmpty() )
+          <tr><td colspan="4">Aucun Stock</td></tr>
+          @else
+          @foreach( $data as $item )
+          <tr>
+          <td>{{ $loop->index+1 }}</td>
+          <td>{{ getChamp('articles','id_article',$item->id_article, 'designation_c') }}</td>
+          <td {{ $item->quantite<=$item->quantite_min ? 'bgcolor="red"' : '' }}> {{ $item->quantite }}</td>
+          <td>
+          <a href="{{ Route('direct.info',['p_table'=> 'magasins' , 'p_id' => $item->id_magasin  ]) }}" title="detail"><i class="glyphicon glyphicon-eye-open"></i></a>
+          </td>
+          </tr>
+          @endforeach
+          @endif
+          @endif
 
-           <tbody>
-             @if ( isset( $data ) )
-             @if( $data->isEmpty() )
-             <tr><td colspan="4">Aucune vente</td></tr>
-             @else
-             @foreach( $data as $item )
-             <tr class="odd gradeA">
-               <td>{{ $loop->index+1 }}</td>
-               <td>{{ getChamp('articles','id_article',$item->id_article, 'designation_c') }}</td>
-               <td>{{ getChamp('articles','id_article',$item->id_article, 'prix_vente') }} DH</td>
-               <td>{{ $item->quantite }}</td>
-               <td>{{ getChamp('articles','id_article',$item->id_article, 'prix_vente') * $item->quantite }} DH</td>
+        </tbody>
+      </table>
+      </div>
 
-
-               <!--<td>
-                 <a href="#" title="detail"><i class="glyphicon glyphicon-eye-open"></i></a>
-                 <a href="#" title="modifier"><i class="glyphicon glyphicon-pencil"></i></a>
-                 <a onclick="return confirm('Êtes-vous sure de vouloir effacer cette transaction de vente: ?')" href="#" title="supprimer"><i class="glyphicon glyphicon-trash"></i></a>
-               </td>-->
-             </tr>
-             @endforeach
-             @endif
-             @endif
-
-           </tbody>
-         </table>
-       </div>
-
-     </div>
-    <!-- row -->
 
 
       <!-- row -->
       <div class="row">
         <div class="col-lg-4"></div>
         <div class="col-lg-8">
-          <a onclick="return alert('Printing ....')" type="button" class="btn btn-outline btn-primary"><i class="fa fa-file-pdf-o" aria-hidden="true">  Imprimer </i></a>
+        <a onclick="return alert('Printing ....')" type="button" class="btn btn-outline btn-primary"><i class="fa fa-file-pdf-o" aria-hidden="true">  Imprimer </i></a>
         </div>
       </div>
       <!-- row -->
 
-    </div>
-    <!-- end main row -->
+  </div>
+  <!-- end main row -->
 
 </div>
 @endsection
+
 
 @section('menu_1')
 	@include('Espace_Vendeur._nav_menu_1')

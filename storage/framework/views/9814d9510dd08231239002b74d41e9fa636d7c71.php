@@ -79,14 +79,14 @@
           <div class="table-responsive">
             <div class="col-lg-12">
               
-              <form role="form" method="post" action="<?php echo e(Route('direct.submitAdd',['param' => 'stock'])); ?>">
+              <form role="form" method="post" action="<?php echo e(Route('direct.submitAddStock')); ?>">
                 <?php echo e(csrf_field()); ?>
 
                 <input type="hidden" name="id_magasin" value="<?php echo e($magasin->id_magasin); ?>" />
                 <table id="example" class="table table-striped table-bordered table-hover">
                   <thead bgcolor="#DBDAD8">
                       <tr>
-                          <th width="1%"> # </th>
+                          <th width="1%">#</th>
                           <th>Article</th>
                           <th>Categorie</th>
                           <th>Fournisseur</th>
@@ -98,7 +98,7 @@
                   </thead>
                   <tfoot bgcolor="#DBDAD8">
                       <tr>
-                          <th width="1%"> # </th>
+                          <th width="1%">#</th>
                           <th>Article</th>
                           <th>Categorie</th>
                           <th>Fournisseur</th>
@@ -111,26 +111,27 @@
                   <tbody>
                     <?php if( isset( $articles ) ): ?>
                     <?php if( $articles->isEmpty() ): ?>
-                    <tr>
-                      <td colspan="5" align="center">Aucun Article</td>
-                    </tr>
+                      <?php echo e(Redirect::to()->back()); ?>
+
                     <?php else: ?>
                     <?php $__currentLoopData = $articles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <tr>
-                        <input type="hidden" name="id_article[<?php echo e($loop->index+1); ?>]" value="<?php echo e($item->id_article); ?>">
-                        <td><?php echo e($loop->index+1); ?></td>
-                        <td><?php echo e($item->designation_c); ?></td>
-                        <td><?php echo e(getChamp('categories', 'id_categorie', $item->id_categorie, 'libelle')); ?></td>
-                        <td><?php echo e(getChamp('fournisseurs', 'id_fournisseur', $item->id_fournisseur, 'libelle')); ?></td>
-                        <td><input type="number" min="0" placeholder="Quantite"     name="quantite[<?php echo e($loop->index+1); ?>]"></td>
-                        <td><input type="number" min="0" placeholder="Quantite Min" name="quantite_min[<?php echo e($loop->index+1); ?>]" value="<?php echo e(old('quantite_min[$loop->index+1]')); ?>"></td>
-                        <td><input type="number" min="0" placeholder="Quantite Max" name="quantite_max[<?php echo e($loop->index+1); ?>]" value="<?php echo e(old('quantite_max[$loop->index+1]')); ?>"></td>
-                        <td>
-                            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal<?php echo e($loop->index+1); ?>">Detail Article</button>
-                        </td>
+                      <input type="hidden" name="id_article[<?php echo e($loop->index+1); ?>]"    value="<?php echo e($item->id_article); ?>">
+                      <input type="hidden" name="designation_c[<?php echo e($loop->index+1); ?>]" value="<?php echo e($item->designation_c); ?>" />
 
-                        
-                        <div class="modal fade" id="myModal<?php echo e($loop->index+1); ?>" role="dialog">
+                      <td><?php echo e($loop->index+1); ?></td>
+                      <td><?php echo e($item->designation_c); ?></td>
+                      <td><?php echo e(getChamp('categories', 'id_categorie', $item->id_categorie, 'libelle')); ?></td>
+                      <td><?php echo e(getChamp('fournisseurs', 'id_fournisseur', $item->id_fournisseur, 'libelle')); ?></td>
+                      <td><input type="number" min="0" placeholder="Quantite"     name="quantite[<?php echo e($loop->index+1); ?>]"></td>
+                      <td><input type="number" min="0" placeholder="Quantite Min" name="quantite_min[<?php echo e($loop->index+1); ?>]" value="<?php echo e(old('quantite_min[$loop->index+1]')); ?>"></td>
+                      <td><input type="number" min="0" placeholder="Quantite Max" name="quantite_max[<?php echo e($loop->index+1); ?>]" value="<?php echo e(old('quantite_max[$loop->index+1]')); ?>"></td>
+                      <td>
+                          <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal<?php echo e($loop->index+1); ?>">Detail Article</button>
+                      </td>
+
+                      
+                      <div class="modal fade" id="myModal<?php echo e($loop->index+1); ?>" role="dialog">
                           <div class="modal-dialog modal-sm">
                             <div class="modal-content">
                               <div class="modal-header">
@@ -153,7 +154,7 @@
                             </div>
                           </div>
                         </div>
-                        
+                      
 
                     </tr>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

@@ -23,24 +23,72 @@
                               <div class="panel panel-yellow">
                                   <div class="panel-heading">
                                       <div class="row">
-                                          <div class="col-xs-6">
+                                          <div class="col-xs-3">
                                               <i class="fa fa-shopping-cart fa-5x"></i>
                                           </div>
-                                          <div class="col-xs-6 text-right">
+                                          <div class="col-xs-9 text-right">
                                               <div class="huge">{{ App\Models\Transaction::where(['id_typeTrans'=> 3,'id_user'=> 3 ])->count() }}</div>
                                               <div>Ventes</div>
                                           </div>
                                       </div>
                                   </div>
-                                  <a href="{{Route('vendeur.lister',['param' => 'ventes' ]) }}">
+                                  <a href="{{Route('vendeur.lister',['param' => 'ventes','p_id_user'=>3]) }}">
                                       <div class="panel-footer">
-                                          <span class="pull-left">Voir Details</span>
+                                          <span class="pull-left">Voir Details ventes</span>
                                           <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                           <div class="clearfix"></div>
                                       </div>
                                   </a>
                               </div>
                           </div>
+
+
+                                        <div class="col-lg-3 col-md-6">
+                                            <div class="panel panel-green">
+                                                <div class="panel-heading">
+                                                    <div class="row">
+                                                        <div class="col-xs-3">
+                                                            <i class="glyphicon glyphicon-gift fa-5x"></i>
+                                                        </div>
+                                                        <div class="col-xs-9 text-right">
+                                                            <div class="huge">{{ App\Models\Promotion::where(['id_magasin'=> 2])->count() }}</div>
+                                                            <div>Promotions</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <a href="{{Route('vendeur.lister',['param' => 'promotions','p_id_user'=>3] )}}">
+                                                    <div class="panel-footer">
+                                                        <span class="pull-left">Voir Details Promotions</span>
+                                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-lg-3 col-md-6">
+                                                                <div class="panel panel-primary">
+                                                                    <div class="panel-heading">
+                                                                        <div class="row">
+                                                                            <div class="col-xs-3">
+                                                                                <i class="fa fa-tasks  fa-5x"></i>
+                                                                            </div>
+                                                                            <div class="col-xs-9 text-right">
+                                                                                <div class="huge">{{ App\Models\Stock::where(['id_magasin'=> 2])->count() }}</div>
+                                                                                <div>Stock magasin</div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <a href="{{Route('vendeur.lister',['param' => 'stocks','p_id_user'=>3] )}}">
+                                                                        <div class="panel-footer">
+                                                                            <span class="pull-left">Voir Details Stock</span>
+                                                                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                                                            <div class="clearfix"></div>
+                                                                        </div>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
 
 
     </div>

@@ -39,7 +39,7 @@
 <div class="container-fluid">
   <!-- main row -->
   <div class="row">
-    <h1 class="page-header">Ventes du magasin<strong></strong> <small> </small></h1>
+    <h1 class="page-header">Detail de la transaction<strong></strong> <small> </small></h1>
     <!-- row -->
     <div class="row">
 
@@ -126,7 +126,10 @@
       <div class="row">
         <div class="col-lg-4"></div>
         <div class="col-lg-8">
-          <a onclick="return alert('Printing ....')" type="button" class="btn btn-outline btn-primary"><i class="fa fa-file-pdf-o" aria-hidden="true">  Imprimer </i></a>
+          <a onclick="return alert('Printing ....')" type="button" class="btn btn-outline btn-default"><i class="fa fa-file-pdf-o" aria-hidden="true">  Imprimer </i></a>
+          <a href="{{ Route('vendeur.addVente',[ 'p_id_trans' => $data->first()->id_trans_Article ]) }}" type="button" class="btn btn-outline btn-default">  Ajouter une vente </a>
+          <a href="{{ Route('vendeur.lister',[ 'p_table' => 'stocks','p_id_user'=>3 ]) }}" type="button" class="btn btn-outline btn-default">  Voir Stock </a>
+
         </div>
       </div>
       <!-- row -->

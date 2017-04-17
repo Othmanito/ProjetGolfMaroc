@@ -1,6 +1,6 @@
 @extends('layouts.main_master')
 
-@section('title') Liste des ventes  @endsection
+@section('title') Liste des promotions du magasin  @endsection
 
 @section('styles')
 <link href="{{  asset('css/bootstrap.css') }}" rel="stylesheet">
@@ -39,7 +39,9 @@
 <div class="container-fluid">
   <!-- main row -->
   <div class="row">
-    <h1 class="page-header">Ventes du magasin<strong></strong> <small> </small></h1>
+
+    <h2 class="page-header">Liste des Promotions disponibles  <strong></strong> <small> </small></h2>
+
     <!-- row -->
     <div class="row">
 
@@ -83,32 +85,26 @@
 	       <table class="table table-striped table-bordered table-hover" id="example">
 
            <thead bgcolor="#DBDAD8">
-             <tr><th width="2%"> # </th><th>Article</th><th>Prix de vente</th><th>Quantité</th><th>Total HT</th></tr>
+             <tr><th width="2%"> # </th><th>Article</th><th>Prix de vente</th><th>Taux</th><th>Prix en Promotion</th><th>Description de la promotion</th></tr>
            </thead>
 
            <tfoot bgcolor="#DBDAD8">
-             <tr><th width="2%"> # </th><th>Article</th><th>Prix de vente</th><th>Quantité</th><th>Total HT</th></tr>
+             <tr><th width="2%"> # </th><th>Article</th><th>Prix de vente</th><th>Taux</th><th>Prix en Promotion</th><th>Description de la promotion</th>></tr>
            </tfoot>
 
            <tbody>
              @if ( isset( $data ) )
              @if( $data->isEmpty() )
-             <tr><td colspan="4">Aucune vente</td></tr>
+             <tr><td colspan="4">Aucune promotion</td></tr>
              @else
              @foreach( $data as $item )
              <tr class="odd gradeA">
                <td>{{ $loop->index+1 }}</td>
                <td>{{ getChamp('articles','id_article',$item->id_article, 'designation_c') }}</td>
                <td>{{ getChamp('articles','id_article',$item->id_article, 'prix_vente') }} DH</td>
-               <td>{{ $item->quantite }}</td>
-               <td>{{ getChamp('articles','id_article',$item->id_article, 'prix_vente') * $item->quantite }} DH</td>
-
-
-               <!--<td>
-                 <a href="#" title="detail"><i class="glyphicon glyphicon-eye-open"></i></a>
-                 <a href="#" title="modifier"><i class="glyphicon glyphicon-pencil"></i></a>
-                 <a onclick="return confirm('Êtes-vous sure de vouloir effacer cette transaction de vente: ?')" href="#" title="supprimer"><i class="glyphicon glyphicon-trash"></i></a>
-               </td>-->
+               <td>{{ $item->Taux*100 }} %</td>
+               <td>{{getChamp('articles','id_article',$item->id_article, 'prix_vente')- (getChamp('articles','id_article',$item->id_article, 'prix_vente') * $item->Taux )}}</td>
+               <td>{{ $item->description }} </td>
              </tr>
              @endforeach
              @endif
@@ -126,7 +122,7 @@
       <div class="row">
         <div class="col-lg-4"></div>
         <div class="col-lg-8">
-          <a onclick="return alert('Printing ....')" type="button" class="btn btn-outline btn-primary"><i class="fa fa-file-pdf-o" aria-hidden="true">  Imprimer </i></a>
+          <a onclick="return alert('Impression en cours ....')" type="button" class="btn btn-outline btn-default"><i class="fa fa-file-pdf-o" aria-hidden="true">  Imprimer </i></a>
         </div>
       </div>
       <!-- row -->
@@ -136,6 +132,7 @@
 
 </div>
 @endsection
+
 
 @section('menu_1')
 	@include('Espace_Vendeur._nav_menu_1')

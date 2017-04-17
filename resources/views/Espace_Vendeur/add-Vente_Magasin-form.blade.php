@@ -9,11 +9,30 @@
 @endsection
 
 @section('scripts')
-<script src="{{  asset('js/jquery.js') }}"></script>
-<script src="{{  asset('js/bootstrap.js') }}"></script>
-
-<script src="{{  asset('table/jquery.dataTables.js') }}"></script>
-<script src="{{  asset('table/dataTables.bootstrap.js') }}"></script>
+<script src="{{  asset('table2/datatables.min.js') }}"></script>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        // Setup - add a text input to each footer cell
+        $('#example tfoot th').each(function() {
+            var title = $(this).text();
+            $(this).html('<input type="text" size="10" class="form-control" placeholder="Rechercher par ' + title + '" />');
+        });
+        // DataTable
+        var table = $('#example').DataTable();
+        // Apply the search
+        table.columns().every(function() {
+            var that = this;
+            $('input', this.footer()).on('keyup change', function() {
+                if (that.search() !== this.value) {
+                    that.search(this.value).draw();
+                }
+            });
+        });
+    });
+    $(document).ready(function(){
+        $('[data-toggle="popover"]').popover();
+    });
+</script>
 @endsection
 
 @section('main_content')
@@ -73,18 +92,18 @@
 
 
                   {{-- *************** formulaire ***************** --}}
-                  <form role="form" method="post" action="{{ Route('direct.submitAdd',['param' => 'stock']) }}">
+                  <form role="form" method="post" action="{{ Route('vendeur.submitAddVente') }}">
                     {{ csrf_field() }}
                     <input type="hidden"  name="id_trans" value="{{ $trans->id_trans_Article }}" />
 
 
-								 <table class="table table-bordered table-hover table-striped" id="dataTables-example">
+								 <table class="table table-striped table-bordered table-hover" id="example">
 
 									 <thead bgcolor="#DBDAD8">
 										 <tr><th width="2%"> # </th><th width="25%">Article</th><th>Categorie</th><th>Fournisseur</th><th>Quantite</th><th width="10%">Autres</th></tr>
 									 </thead>
 									 <tfoot bgcolor="#DBDAD8">
-										 <tr><th width="2%"> # </th><th width="25%">Article</th><th>Categorie</th><th>Fournisseur</th><th>Quantite</th><th width="10%">Autres</th></tr>
+										 <tr><th width="2%"> # </th><th width="25%">Article</th><th>Categorie</th><th>Fournisseur</th><th>Quantité en stock</th><th>Quantite</th><th width="10%">Autres</th></tr>
 									 </tfoot>
 
 									 <tbody>
@@ -100,6 +119,8 @@
 											 <td>{{ $item->designation_c }}</td>
                        <td>{{ getChamp('categories', 'id_categorie', $item->id_categorie, 'libelle') }}</td>
                        <td>{{ getChamp('fournisseurs', 'id_fournisseur',  $item->id_fournisseur, 'libelle') }}</td>
+                      
+
 											 <td><input type="number" min="0" placeholder="Quantite" name="quantite[{{ $loop->index+1 }}]"  ></td>
 											 <td>
 													 <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal{{ $loop->index+1 }}">Detail Article</button>
@@ -141,7 +162,7 @@
 
 
 								 </table>
-								<center><button type="submit" name="submit" value="valider" class="btn btn-default">Valider la vente</button></center>
+								<center><button type="submit" name="submit" value="valider" class="btn btn-primary">Valider la vente</button></center>
 
 </form>
 
@@ -181,7 +202,7 @@
 
 							<div class="col-lg-3"></div>
 						</div>
-						<!-- end row 5 
+						<!-- end row 5
 						@endif
 						{{-- fin if --}}
 					-->

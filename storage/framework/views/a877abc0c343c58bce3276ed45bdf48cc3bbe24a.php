@@ -12,6 +12,11 @@
 
 <script src="<?php echo e(asset('table/jquery.dataTables.js')); ?>"></script>
 <script src="<?php echo e(asset('table/dataTables.bootstrap.js')); ?>"></script>
+<script>
+$(document).ready(function(){
+		$('[data-toggle="popover"]').popover();
+});
+</script>
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('main_content'); ?>
@@ -22,10 +27,11 @@
 
 		<div id="page-wrapper">
 
+			
 			<div class="row">
 				<div class="col-lg-2"></div>
 				<div class="col-lg-8">
-				
+
 				<?php if(session('alert_success')): ?>
 				<div class="alert alert-success alert-dismissable">
 					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> <?php echo session('alert_success'); ?>
@@ -53,13 +59,14 @@
 
 				</div>
 				<?php endif; ?>
-				
+				</div>
+				<div class="col-lg-2"></div>
 			</div>
-			<div class="col-lg-2"></div>
-
-			</div>
+			
 
 			<div class="container-fluid">
+
+
 				<div class="col-lg-1"></div>
 				<div class="col-lg-10">
 
@@ -116,7 +123,8 @@
 							<div class="col-lg-4">
 								<a href="<?php echo e(Route('direct.delete',['p_table' => 'magasins', 'p_id' => $data->id_magasin ])); ?>" onclick="return confirm('Êtes-vous sure de vouloir effacer le magasin: <?php echo e($data->libelle); ?> ?')" type="button" class="btn btn-outline btn-danger"
                   title="" data-toggle="popover" data-placement="top" data-trigger="hover" data-content="Supprimer le magasin et vider son stock" >Supprimer </a>
-								<a href="<?php echo e(Route('direct.updateForm',['id_article' => $data->id_magasin, 'p_table' => 'magasins' ])); ?>" type="button" class="btn btn-outline btn-info"> Modifier </a>
+								<a href="<?php echo e(Route('direct.update',['id_article' => $data->id_magasin, 'p_table' => 'magasins' ])); ?>" type="button" class="btn btn-outline btn-info"
+									title="" data-toggle="popover" data-placement="top" data-trigger="hover" data-content="Modifier les informations du magasin" > Modifier </a>
 
 							</div>
 
@@ -135,7 +143,7 @@
 
 			<div class="row">
 				<div class="col-lg-1"></div>
-			<div class="col-lg-10">
+				<div class="col-lg-10">
 
 					<div class="panel panel-default">
 						<!-- Default panel contents -->
@@ -149,38 +157,95 @@
 
 							
 		          <div class="col-lg-12">
-							 <table class="table table-bordered table-hover table-striped" id="dataTables-example">
+								<table class="table table-bordered table-hover table-striped" id="dataTables-example">
 
-								 <thead>
-									 <tr><th width="2%"> # </th><th> Article </th><th>Quantite</th><th width="10%">Autres</th></tr>
-								 </thead>
+								<thead>
+									<tr><th width="2%"> # </th><th> Article </th><th width="15%">Quantite</th><th width="50%">Etat</th></tr>
+								</thead>
 
-								 <tbody>
-									 <?php if( isset( $stocks ) ): ?>
-									 <?php if( $stocks->isEmpty() ): ?>
-									 <tr><td colspan="4">le stock de ce magasin est vide, appuyez sur le bouton en bas de la page pour lui ajouter des articles</td></tr>
-									 <?php else: ?>
-									 <?php $__currentLoopData = $stocks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-									 <tr class="odd gradeA">
-										 <td><?php echo e($loop->index+1); ?></td>
-										 <td><?php echo e(getChamp('articles','id_article',$item->id_article, 'designation_c')); ?></td>
-										 <td <?php echo e($item->quantite<=$item->quantite_min ? 'bgcolor="red"' : ''); ?>> <?php echo e($item->quantite); ?></td>
-										 <td>
-											 <a href="<?php echo e(Route('direct.info',['p_table'=> 'magasins' , 'p_id' => $item->id_magasin  ])); ?>" title="detail"><i class="glyphicon glyphicon-eye-open"></i></a>
-											 <a href="<?php echo e(Route('direct.updateForm',['p_table'=> 'magasins' , 'p_id' => $item->id_magasin  ])); ?>" title="modifier"><i class="glyphicon glyphicon-pencil"></i></a>
-											 <a onclick="return confirm('Êtes-vous sure de vouloir effacer le magasin: <?php echo e($item->libelle); ?> ?')" href="<?php echo e(Route('direct.delete',['p_table' => 'magasins' , 'p_id' => $item->id_magasin ])); ?>" title="supprimer"><i class="glyphicon glyphicon-trash"></i></a>
-										 </td>
-									 </tr>
-									 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-									 <?php endif; ?>
-									 <?php endif; ?>
+								<tbody>
+									<?php if( isset( $stocks ) ): ?>
+										<?php if( $stocks->isEmpty() ): ?>
+											<tr><td colspan="4">le stock de ce magasin est vide, appuyez sur le bouton en bas de la page pour lui ajouter des articles</td></tr>
+										<?php else: ?>
 
-								 </tbody>
+										
+										<?php $__currentLoopData = $stocks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+
+										
+										<?php if( $item->quantite > $item->quantite_min ): ?>
+										<tr class="success">
+										<?php endif; ?>
+										<?php if( $item->quantite < $item->quantite_min ): ?>
+										<tr class="danger">
+										<?php endif; ?>
+										<?php if( $item->quantite == $item->quantite_min ): ?>
+										<tr class="warning">
+										<?php endif; ?>
+										
+
+										<td><?php echo e($loop->index+1); ?></td>
+										<td><?php echo e(getChamp("articles", "id_article",  $item->id_article , "designation_c")); ?></td>
+										<!--td><?php echo e($item->quantite_min); ?> | <?php echo e($item->quantite); ?> | <?php echo e($item->quantite_max); ?></td-->
+
+										<td> <?php echo e($item->quantite); ?> unités (<?php echo e(($item->quantite / $item->quantite_max)*100); ?>%) </td>
+
+										<td>
+											<div class="progress">
+												<div class="progress-bar progress-bar-danger progress-bar-striped" style="width: <?php echo e(100*($item->quantite_min/$item->quantite_max)); ?>%"></div>
+												<div class="progress-bar progress-bar-success progress-bar-striped" style="width: <?php echo e(100*($item->quantite/$item->quantite_max)); ?>%"></div>
+											</div>
+										</td>
+										<td><button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal<?php echo e($loop->index+1); ?>">Detail</button></td>
+
+										
+										<div class="modal fade" id="myModal<?php echo e($loop->index+1); ?>" role="dialog">
+												<div class="modal-dialog modal-sm">
+													<div class="modal-content">
+														<div class="modal-header">
+															<button type="button" class="close" data-dismiss="modal">&times;</button>
+															<h4 class="modal-title"><?php echo e(getChamp("articles", "id_article",  $item->id_article , "designation_c")); ?></h4>
+														</div>
+														<div class="modal-body">
+															<p><b>Quantité </b> <?php echo e($item->quantite); ?> </p>
+															<p><b>Quantité Min</b> <?php echo e($item->quantite_min); ?> </p>
+															<p><b>Quantité Max</b> <?php echo e($item->quantite_max); ?> </p>
+															<hr>
+															<p><b>numero</b> <?php echo e(getChamp("articles", "id_article",  $item->id_article , "num_article")); ?></p>
+															<p><b>code a barres</b> <?php echo e(getChamp("articles", "id_article",  $item->id_article , "code_barre")); ?></p>
+															<p><b>Taille</b> <?php echo e(getChamp("articles", "id_article",  $item->id_article , "taille")); ?></p>
+															<p><b>Couleur</b> <?php echo e(getChamp("articles", "id_article",  $item->id_article , "couleur")); ?></p>
+															<p><b>sexe</b> <?php echo e(getSexeName(getChamp("articles", "id_article",  $item->id_article , "sexe") )); ?></p>
+															<p><b>Prix d'achat</b> <?php echo e(getChamp("articles", "id_article",  $item->id_article , "prix_achat")); ?></p>
+															<p><b>Prix de vente</b> <?php echo e(getChamp("articles", "id_article",  $item->id_article , "prix_vente")); ?></p>
+															<p><?php echo e(getChamp("articles", "id_article",  $item->id_article , "designation_l")); ?></p>
+														</div>
+														<div class="modal-footer">
+															<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+														</div>
+													</div>
+												</div>
+											</div>
+										
+
+									</tr>
+
+									<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+									
+									<?php endif; ?>
+									<?php endif; ?>
+
+
+								</tbody>
 							 </table>
 						 </div>
 						</div>
 						 
 
+						 <div calss="row" align="center">
+							 <a href="<?php echo e(Route('direct.addStock',['p_id_magasin' => $data->id_magasin ])); ?>" type="button" class="btn btn-outline btn-info"
+							 title="" data-toggle="popover" data-placement="top" data-trigger="hover" data-content="Ajouter des articles au stock de ce magasin"> Remplir le Stock </a>
+						 </div>
 
 					</div>
 				</div>

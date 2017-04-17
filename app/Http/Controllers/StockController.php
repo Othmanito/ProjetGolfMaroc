@@ -19,9 +19,21 @@ use \Exception;
 class StockController extends Controller
 {
 
-	/****************************
+	/*****************************************************************************
+	Lister Stocks
+	*****************************************************************************/
+	public function listerStocks($p_id_magasin)
+	{
+		$data = Stock::where('id_magasin', $p_id_magasin)->get();
+		if($data->isEmpty())
+			return redirect()->back()->withInput()->with('alert_warning','Le stock de ce magasin est vide.');
+		else
+			return view('Espace_Direct.liste-stocks')->with('data',$data);
+	}
+
+	/*****************************************************************************
 	Afficher le fomulaire d'ajout pour le stock
-	****************************/
+	*****************************************************************************/
 	public function addStock($p_id_magasin)
 	{
 		$magasin = Magasin::where('id_magasin',$p_id_magasin)->first();		//$articles = Article::all();
@@ -40,72 +52,68 @@ class StockController extends Controller
 			return view('Espace_Direct.add-stock_Magasin-form')->with(['data' => Stock::all(), 'articles' => $articles,  'magasin' => $magasin ]);
 	}
 
-
-
-	public function submitAdd($p_table)
-	{
-	 switch($p_table)
-	 {
-		 case 'stocks':       return $this->submitAddStock(); break;
-		 default: return redirect()->back()->withInput()->with('alert_warning','<strong>Erreur !!</strong> Vous avez pris le mauvais chemin. ==> AddController@submitAdd');      break;
-	 }
-	}
-
-
-
-	//Valider l'ajout de : Stock
+	/*****************************************************************************
+	Valider l'ajout des articles au stock d'un magasin
+	*****************************************************************************/
 	public function submitAddStock()
 	{
-		$id_article   = request()->get('id_article');
-		$quantite     = request()->get('quantite');
-		$quantite_min = request()->get('quantite_min');
-		$quantite_max = request()->get('quantite_max');
+		//id du magasin
+		$id_magasin   	= request()->get('id_magasin');
 
-		foreach( $id_article as $item )
+		//array des element du formulaire
+		$id_article   	= request()->get('id_article');
+		$designation_c	= request()->get('designation_c');
+		$quantite     	= request()->get('quantite');
+		$quantite_min 	= request()->get('quantite_min');
+		$quantite_max 	= request()->get('quantite_max');
+
+		$alert1 = "";
+		$alert2 = "";
+		$error1 = false;
+		$error2 = false;
+		$nbre_articles = 0;
+
+		for( $i=1; $i<=count($id_article) ; $i++ )
 		{
-			echo "<li>".$item;
+			if( $quantite[$i] == null ) continue;
+
+			if( $quantite_min[$i]>$quantite_max[$i] )
+			{
+				$alert1 = $alert1."<li><b>".$designation_c[$i]."</b>: Quantite min superieur a la quantité max.";
+				$error1 = true;
+			}
+
+			if( $quantite[$i] != null && ($quantite_min[$i] == null || $quantite_max[$i] == null) )
+			{
+				$alert1 = $alert1."<li> ".$i.": <b>".$designation_c[$i]."</b>: vous avez oublier de specifier la quantite min et/ou la quantite max.";
+				$error1 = true;
+			}
+
+			if( $quantite[$i]!=null && $quantite_min[$i]<=$quantite_max[$i] )
+			{
+				$item = new Stock;
+				$item->id_magasin    = $id_magasin;
+				$item->id_article    = $id_article[$i];
+				$item->quantite      = $quantite[$i];
+				$item->quantite_min  = $quantite_min[$i];
+				$item->quantite_max  = $quantite_max[$i];
+
+				try
+				{
+					$item->save();
+					$nbre_articles++;
+				} catch (Exception $e) { $error2 = true; $alert2 = $alert2."<li>Erreur d'ajout de l'article: <b>".$designation_c[$i]."</b> Message d'erreur: ".$e->getMessage().". ";}
+			}
 		}
 
-		for( $i=1; $i< count($id_article) ; $i++ )
-		{
-			echo $id_article[$i]." ".$quantite[$i]." ".$quantite_min[$i]." ".$quantite_max[$i]."<br>";
-		}
+		if($error1)
+			back()->withInput()->with('alert_warning',$alert1);
+		if($error2)
+			back()->withInput()->with('alert_danger',$alert2);
 
-		dump ( 'id_article', request()->get('id_article'));
-		dump ( 'quantite', request()->get('quantite') );
-		dump ( 'quantite_min', request()->get('quantite_min') );
+		return redirect()->back()->with('alert_success','Creation du stock reussit. nbre articles: '.$nbre_articles);
 
-		dump(request());
 
-		foreach( request()->get('quantite') as $q )
-		{
-			echo $q."<br>";
-		}
-		return 'aa';
-
-		if( request()->get('submit') == 'verifier' )
-		{
-			 return redirect()->back()->withInput()->with('alert_success','Verifier le stock (magasin/article).s');
-		}
-		else if( request()->get('submit') == 'valider' )
-		{
-			//if( request()->get('libelle')==null )
-			 //return redirect()->back()->withInput()->with('alert_danger','<strong>Erreur !!</strong> veuillez remplir le champ libelle');
-
-			$item = new Stock;
-			$item->id_magasin    = request()->get('id_magasin');
-			$item->id_article    = request()->get('id_article');
-			$item->quantite      = request()->get('quantite');
-			$item->quantite_min  = request()->get('quantite_min');
-			$item->quantite_max  = request()->get('quantite_max');
-
-			$item->save();
-			return redirect()->back()->with('alert_success','Done');
-		}
-		else
-		{
-			return redirect()->back()->withInput()->with('alert_danger','<strong>Erreur de Redirection</strong><br> from: DirectController@submitAdd (submitAddStock)');
-		}
 	}
 
 
