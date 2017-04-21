@@ -1,4 +1,4 @@
-<?php $__env->startSection('title'); ?> Liste des ventes  <?php $__env->stopSection(); ?>
+<?php $__env->startSection('title'); ?> Detail de vente  <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('styles'); ?>
 <link href="<?php echo e(asset('css/bootstrap.css')); ?>" rel="stylesheet">
@@ -37,7 +37,7 @@
 <div class="container-fluid">
   <!-- main row -->
   <div class="row">
-    <h1 class="page-header">Detail de la transaction<strong></strong> <small> </small></h1>
+    <h1 class="page-header">Detail de la vente<strong></strong> <small> </small></h1>
     <!-- row -->
     <div class="row">
 

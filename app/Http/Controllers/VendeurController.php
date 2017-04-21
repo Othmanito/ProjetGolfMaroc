@@ -16,10 +16,9 @@ use App\Models\Transaction;
 use App\Models\Trans_Article;
 use App\Models\Type_transaction;
 use App\Models\Promotion;
+use App\Models\ModePaiement;
+use App\Models\Paiement;
 use \Exception;
-
-
-
 
 class VendeurController extends Controller
 
@@ -37,6 +36,8 @@ class VendeurController extends Controller
     {
       //lister les transactions du magasin du vendeur
       case 'transact': $data = collect( DB::select("call getTransactionsMagasin(".$p_id_user.");"));return view('Espace_Vendeur.liste-transact')->with('data',$data);break;
+    //  case 'transact2': $data = collect( DB::select("call getTransactionsMagasin(".$p_id_user.");"));return view('Espace_Vendeur._nav_menu_2')->with('data',$data);break;
+
       //Lister les ventes du magasin du vendeur
       case 'ventes': $data = collect( DB::select("call getVentesMagasin(".$p_id_user.");"));return view('Espace_Vendeur.liste-ventes')->with('data',$data);break;
       //Lister les promotions du magasin du vendeur
@@ -59,10 +60,11 @@ class VendeurController extends Controller
   }
 
   //Afficher le formulaire d'Ajout de ventes
-  public function addFormVente($p_id_trans)
+  public function addFormVente($p_id_mag)
   {
-    $trans = Trans_Article::where('id_trans_Article',$p_id_trans)->first();
-    $articles = collect( DB::select("call getArticlesForAjout(".$p_id_trans."); ") );
+    $trans = Trans_Article::where('id_trans_Article',$p_id_mag)->first();
+    $articles = collect( DB::select("call getArticlesForAjout(".$p_id_mag."); ") );
+    $mode=collect( DB::select("call getMode(); ") );
     $alert1 = "";
 
     if( $articles == null )
@@ -75,7 +77,7 @@ class VendeurController extends Controller
       return back()->withInput()->with('alert_warning',$alert1);
 
     else
-      return view('Espace_Vendeur.add-Vente_Magasin-form')->with(['data' => Stock::all(), 'articles' => $articles,  'trans' => $trans ]);
+      return view('Espace_Vendeur.add-Vente_Magasin-form')->with(['data' => Stock::all(), 'articles' => $articles,  'trans' => $trans ,'mode'=>$mode]);
   }
 
 
@@ -83,14 +85,23 @@ class VendeurController extends Controller
 // Valider l'ajout des ventes du Magasin
 public function submitAddVente()
 {
-  //id du magasin
-  $id_trans_Article = request()->get('id_trans_Article');
+  //id du Transaction
+ $id_trans_Article = request()->get('id_trans_Article');
 
   //array des element du formulaire
   $id_article   	= request()->get('id_article');
   $designation_c	= request()->get('designation_c');
-  $quantite     	= request()->get('quantite');
+  $quantiteV     	= request()->get('quantiteV');
   $prix_vente     = request()->get('prix_vente');
+  $quantite       = request()->get('quantite');
+  $id_transaction = request()->get('id_transaction');
+  $id_magasin     = request()->get('id_magasin');
+  $id_user   	    = request()->get('id_user');
+  $id_typeTrans   = request()->get('id_typeTrans');
+  $id_paiement    =  request()->get('id_paiement');
+  $id_mode        = request()->get('mode');
+
+
 
   $alert1 = "";
   $alert2 = "";
@@ -100,32 +111,46 @@ public function submitAddVente()
 
   for( $i=1; $i<=count($id_article) ; $i++ )
   {
-    if( $quantite[$i] == null ) continue;
 
-    /*if( $quantite_min[$i]>$quantite_max[$i] )
+    if( $quantite[$i]> $quantiteV[$i] )
     {
-      $alert1 = $alert1."<li><b>".$designation_c[$i]."</b>: Quantite min superieur a la quantité max.";
+      $alert1 = $alert1."<li><b> La quantité vendu de l'article ".$designation_c[$i]."</b>: est supérieure à la quantité en stock : veuillez inserer une nouvelle quantité !";
       $error1 = true;
     }
 
-    if( $quantite[$i] != null && ($quantite_min[$i] == null || $quantite_max[$i] == null) )
+    if( $quantite[$i] == null )
     {
-      $alert1 = $alert1."<li> ".$i.": <b>".$designation_c[$i]."</b>: vous avez oublier de specifier la quantite min et/ou la quantite max.";
+      $alert1 = $alert1."<li> ".$i.": <b></b>: vous avez oublier de specifier la quantite vendue de l'article :".$designation_c[$i];
       $error1 = true;
-    }*/
+    }
 
     if( $quantite[$i]!=null )
     {
       $item = new Trans_Article;
-      $item->id_trans_Article    = $id_trans_Article;
+      $item2=new Transaction;
+      $item3=new Paiement;
+      //$item->id_trans_Article    = $id_trans_Article;
       $item->id_article    = $id_article[$i];
+      $item->id_transaction= $id_transaction[$i];
       $item->quantite      = $quantite[$i];
+
+    //  $item2->id_transaction=$id_transaction;
+      $item2->id_magasin=$id_magasin[$i];
+      $item2->id_user=$id_user[$i];
+      $item2->id_typeTrans=$id_typeTrans[$i];
+      $item2->id_paiement=$id_paiement[$i];
+
+      //$item3->id_paiement=$id_paiement;
+      $item3->id_mode=$id_mode;
+
 
       try
       {
         $item->save();
+        $item2->save();
+        $item3->save();
         $nbre_articles++;
-      } catch (Exception $e) { $error2 = true; $alert2 = $alert2."<li>Erreur d'ajout de l'article: <b>".$designation_c[$i]."</b> Message d'erreur: ".$e->getMessage().". ";}
+      } catch (Exception $e) { $error2 = true; $alert2 = $alert2."<li>Erreur d'ajout de la vente d'article: <b>".$designation_c[$i]."</b> Message d'erreur: ".$e->getMessage().". ";}
     }
   }
 

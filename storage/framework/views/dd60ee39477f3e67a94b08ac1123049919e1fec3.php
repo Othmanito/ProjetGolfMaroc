@@ -30,9 +30,9 @@
                                           </div>
                                       </div>
                                   </div>
-                                  <a href="<?php echo e(Route('vendeur.lister',['param' => 'ventes','p_id_user'=>3])); ?>">
+                                  <a href="<?php echo e(Route('vendeur.lister',['param' => 'transact','p_id_user'=>3])); ?>">
                                       <div class="panel-footer">
-                                          <span class="pull-left">Voir Details ventes</span>
+                                          <span class="pull-left">Consulter</span>
                                           <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                           <div class="clearfix"></div>
                                       </div>
@@ -56,7 +56,7 @@
                                                 </div>
                                                 <a href="<?php echo e(Route('vendeur.lister',['param' => 'promotions','p_id_user'=>3] )); ?>">
                                                     <div class="panel-footer">
-                                                        <span class="pull-left">Voir Details Promotions</span>
+                                                        <span class="pull-left">Consulter</span>
                                                         <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                                         <div class="clearfix"></div>
                                                     </div>
@@ -80,7 +80,7 @@
                                                                     </div>
                                                                     <a href="<?php echo e(Route('vendeur.lister',['param' => 'stocks','p_id_user'=>3] )); ?>">
                                                                         <div class="panel-footer">
-                                                                            <span class="pull-left">Voir Details Stock</span>
+                                                                            <span class="pull-left">Consulter</span>
                                                                             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                                                             <div class="clearfix"></div>
                                                                         </div>

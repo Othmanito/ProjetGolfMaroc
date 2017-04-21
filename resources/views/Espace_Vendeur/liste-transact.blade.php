@@ -1,6 +1,6 @@
 @extends('layouts.main_master')
 
-@section('title') Liste des transactions  @endsection
+@section('title') Liste des ventes  @endsection
 
 @section('styles')
 <link href="{{  asset('css/bootstrap.css') }}" rel="stylesheet">
@@ -39,7 +39,7 @@
 <div class="container-fluid">
   <!-- main row -->
   <div class="row">
-    <h1 class="page-header">Liste des Transactions<strong></strong> <small> </small></h1>
+    <h1 class="page-header">Liste des ventes du magasin<strong></strong> <small> </small></h1>
     <!-- row -->
     <div class="row">
 
@@ -83,31 +83,28 @@
 	       <table class="table table-striped table-bordered table-hover" id="example">
 
            <thead bgcolor="#DBDAD8">
-             <tr><th width="2%"> # </th><th>Type de Transaction</th><th>Date de Transaction</th><th width="10%">Autres</th></tr>
+             <tr><th width="2%"> # </th><th>Date de vente</th><th>Total Articles vendus</th><th>Mode de paiement</th><th width="10%">Autres</th></tr>
            </thead>
 
            <tfoot bgcolor="#DBDAD8">
-             <tr><th width="2%"> # </th><th>Type de Transaction</th><th>Date de transaction</th><th width="10%">Autres</th></tr>
+             <tr><th width="2%"> # </th><th>Date de vente</th><th>Total Articles vendus</th><th>Mode de paiement</th><th width="10%">Autres</th></tr>
            </tfoot>
 
            <tbody>
-             @if ( isset( $data ) )
              @if( $data->isEmpty() )
-             <tr><td colspan="4">Aucune transaction</td></tr>
+             <tr><td colspan="4">Aucune vente</td></tr>
              @else
              @foreach( $data as $item )
              <tr class="odd gradeA">
                <td>{{ $loop->index+1 }}</td>
-               <td>{{ getChamp('type_transaction','id_typeTrans',$item->id_typeTrans, 'libelle') }}</td>
                <td>{{ getDateHelper($item->created_at) }} </td>
-
+               <td>{{App\Models\Trans_Article::where(['id_transaction'=> $item->id_transaction ])->count()}}</td>
+               <td>{{ getChamp('mode_paiements','id_mode',getChamp('paiements', 'id_paiement', $item->id_paiement, 'id_mode') , 'libelle') }}</td>
                <td>
                  <a href="{{ Route('vendeur.details',['p_id' => $item->id_transaction  ]) }}" title="detail"><i class="glyphicon glyphicon-eye-open"></i></a>
-                 <!--<a onclick="return confirm('Êtes-vous sure de vouloir effacer cette transaction de vente: ?')" href="#" title="supprimer"><i class="glyphicon glyphicon-trash"></i></a>-->
                </td>
              </tr>
              @endforeach
-             @endif
              @endif
 
            </tbody>

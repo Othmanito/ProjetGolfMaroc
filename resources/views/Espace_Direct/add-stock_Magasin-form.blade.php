@@ -108,7 +108,7 @@
                   <tbody>
                     @if ( isset( $articles ) )
                     @if( $articles->isEmpty() )
-                      {{ Redirect::to()->back() }}
+                    aaa
                     @else
                     @foreach( $articles as $item )
                     <tr>

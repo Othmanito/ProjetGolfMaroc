@@ -15,4 +15,8 @@ class Article extends Model
       'code_barre','num_article' ,
       'couleur','taille', 'sexe','prix_achat','prix_vente',
     ];
+    public function transactions()
+     {
+         return $this->belongsTo(\App\Models\Transaction::class);
+     }
 }

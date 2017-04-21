@@ -1,6 +1,6 @@
 @extends('layouts.main_master')
 
-@section('title') Liste des ventes  @endsection
+@section('title') Detail de vente  @endsection
 
 @section('styles')
 <link href="{{  asset('css/bootstrap.css') }}" rel="stylesheet">
@@ -39,7 +39,7 @@
 <div class="container-fluid">
   <!-- main row -->
   <div class="row">
-    <h1 class="page-header">Detail de la transaction<strong></strong> <small> </small></h1>
+    <h1 class="page-header">Detail de la vente<strong></strong> <small> </small></h1>
     <!-- row -->
     <div class="row">
 

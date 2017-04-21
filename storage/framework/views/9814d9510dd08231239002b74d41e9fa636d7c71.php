@@ -111,8 +111,7 @@
                   <tbody>
                     <?php if( isset( $articles ) ): ?>
                     <?php if( $articles->isEmpty() ): ?>
-                      <?php echo e(Redirect::to()->back()); ?>
-
+                    aaa
                     <?php else: ?>
                     <?php $__currentLoopData = $articles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <tr>
