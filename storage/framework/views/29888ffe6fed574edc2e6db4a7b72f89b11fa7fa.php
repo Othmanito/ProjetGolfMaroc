@@ -79,11 +79,11 @@
     <div class="table-responsive">
 	    <table id="example" class="table table-striped table-bordered table-hover">
 
-        <thead bgcolor="#DBDAD8">
-          <tr><th width="2%"> # </th><th> Article </th><th>Quantite</th></tr>
+        <thead bgcolor="#DBDAD8" align="center" >
+          <tr align="center"><th width="2%" align="center"> # </th><th align="center"> Article </th><th align="center">Quantite</th><th align="center">Autres</th></tr>
         </thead>
         <tfoot bgcolor="#DBDAD8">
-          <tr><th id="i1" width="2%"> # </th><th> Article </th><th>Quantite</th></tr>
+          <tr><th id="i1" width="2%"> # </th><th> Article </th><th>Quantite</th><th>Autres</th></tr>
         </tfoot>
 
         <tbody>
@@ -93,11 +93,11 @@
           <?php else: ?>
           <?php $__currentLoopData = $data; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
           <tr>
-          <td><?php echo e($loop->index+1); ?></td>
-          <td><?php echo e(getChamp('articles','id_article',$item->id_article, 'designation_c')); ?></td>
-          <td <?php echo e($item->quantite<=$item->quantite_min ? 'bgcolor="red"' : ''); ?>> <?php echo e($item->quantite); ?></td>
-          <td>
-          <a href="<?php echo e(Route('direct.info',['p_table'=> 'magasins' , 'p_id' => $item->id_magasin  ])); ?>" title="detail"><i class="glyphicon glyphicon-eye-open"></i></a>
+          <td align="right"><?php echo e($loop->index+1); ?></td>
+          <td align="left"><?php echo e(getChamp('articles','id_article',$item->id_article, 'designation_c')); ?></td>
+          <td align="right"  > <?php echo e($item->quantite); ?></td>
+          <td align="center">
+          <a href="#" title="detail"><i class="glyphicon glyphicon-eye-open"></i></a>
           </td>
           </tr>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

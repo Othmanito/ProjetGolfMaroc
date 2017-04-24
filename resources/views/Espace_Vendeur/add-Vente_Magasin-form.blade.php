@@ -1,6 +1,6 @@
 @extends('layouts.main_master')
 
-@section('title') Ajouter une vente du magasin {{ $trans->libelle }}  @endsection
+@section('title') Ajouter une vente   @endsection
 
 @section('styles')
 <link href="{{  asset('css/bootstrap.css') }}" rel="stylesheet">
@@ -38,7 +38,7 @@
 @section('main_content')
 <div class="row">
 	<div class="col-lg-12">
-		<h1 class="page-header">Ajouter une vente  <small> </small></h1>
+		<h1 class="page-header">Ajouter une vente <small> </small></h1>
 
 		<div id="page-wrapper">
 
@@ -117,7 +117,7 @@
                                                 </div></div></div>
 
                     {{ csrf_field() }}
-                    <input type="hidden"  name="id_trans" value="{{ $trans->id_trans_Article }}" />
+
 
 
 								 <table class="table table-striped table-bordered table-hover" id="example">
@@ -140,20 +140,20 @@
                        <input type="hidden" name="id_article[{{ $loop->index+1 }}]" value="{{ $item->id_article }}" >
                        <input type="hidden" name="designation_c[{{ $loop->index+1 }}]" value="{{ getChamp('articles', 'id_article', $item->id_article , 'designation_c')  }}" />
                        <input type="hidden" name="id_transaction[{{ $loop->index+1 }}]" value="{{ getChamp('transactions', 'id_magasin', $item->id_magasin , 'id_transaction')  }}" />
-                       <input type="hidden" name="id_magasin[{{ $loop->index+1 }}]" value="{{ $item->id_magasin }}" >
-                       <input type="hidden" name="id_user[{{ $loop->index+1 }}]" value="{{ getChamp('transactions', 'id_magasin', $item->id_magasin , 'id_user')  }}" >
-                       <input type="hidden" name="id_typeTrans[{{ $loop->index+1 }}]" value="{{ getChamp('transactions', 'id_magasin', $item->id_magasin , 'id_typeTrans')  }}" >
-                       <input type="hidden" name="id_paiement[{{ $loop->index+1 }}]" value="{{ getChamp('transactions', 'id_magasin', $item->id_magasin , 'id_paiement')  }}" >
-                       <input type="hidden" name="quantiteV[{{ $loop->index+1 }}]" value="{{ $item->quantite }}" >
+                       <input type="hidden" name="id_magasin" value="{{ $item->id_magasin }}" >
+                       <input type="hidden" name="id_user" value="{{ getChamp('transactions', 'id_magasin', $item->id_magasin , 'id_user')  }}" >
+                       <input type="hidden" name="id_typeTrans" value="{{ getChamp('transactions', 'id_magasin', $item->id_magasin , 'id_typeTrans')  }}" >
+                       <input type="hidden" name="id_paiement" value="{{ getChamp('transactions', 'id_magasin', $item->id_magasin , 'id_paiement')  }}" >
+                       <input type="hidden" name="quantiteV" value="{{ $item->quantite }}" >
 
-											 <td>{{ $loop->index+1 }}</td>
+											 <td align="right">{{ $loop->index+1 }}</td>
                        <td>{{ getChamp('articles', 'id_article', $item->id_article , 'designation_c') }}</td>
                        <td>{{ getChamp('categories', 'id_categorie', getChamp('articles', 'id_article', $item->id_article, 'id_categorie') , 'libelle') }}</td>
                        <td>{{ getChamp('fournisseurs', 'id_fournisseur', getChamp('articles', 'id_article', $item->id_article, 'id_fournisseur') , 'libelle') }}</td>
-                       <td>{{ getChamp('articles', 'id_article', $item->id_article , 'prix_vente') }}</td>
+                       <td align="right">{{ number_format(getChamp('articles', 'id_article', $item->id_article , 'prix_vente'),2,',','') }} DH</td>
 
-                       <td>{{ $item->quantite }}</td>
-											 <td><input type="number" min="0" placeholder="Quantite" name="quantite[{{ $loop->index+1 }}]"  ></td>
+                       <td align="right">{{ $item->quantite }}</td>
+											 <td><input type="number" min="0" placeholder="Quantite" name="quantite[{{ $loop->index+1 }}]"  max="{{ $item->quantite }}" ></td>
 											 <td>
 													 <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal{{ $loop->index+1 }}">Detail Article</button>
 											 </td>

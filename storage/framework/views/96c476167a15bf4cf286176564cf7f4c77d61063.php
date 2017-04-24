@@ -1,4 +1,4 @@
-<?php $__env->startSection('title'); ?> Ajouter une vente du magasin <?php echo e($trans->libelle); ?>  <?php $__env->stopSection(); ?>
+<?php $__env->startSection('title'); ?> Ajouter une vente   <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('styles'); ?>
 <link href="<?php echo e(asset('css/bootstrap.css')); ?>" rel="stylesheet">
@@ -36,7 +36,7 @@
 <?php $__env->startSection('main_content'); ?>
 <div class="row">
 	<div class="col-lg-12">
-		<h1 class="page-header">Ajouter une vente  <small> </small></h1>
+		<h1 class="page-header">Ajouter une vente <small> </small></h1>
 
 		<div id="page-wrapper">
 
@@ -120,7 +120,7 @@
 
                     <?php echo e(csrf_field()); ?>
 
-                    <input type="hidden"  name="id_trans" value="<?php echo e($trans->id_trans_Article); ?>" />
+                    
 
 
 								 <table class="table table-striped table-bordered table-hover" id="example">
@@ -143,20 +143,20 @@
                        <input type="hidden" name="id_article[<?php echo e($loop->index+1); ?>]" value="<?php echo e($item->id_article); ?>" >
                        <input type="hidden" name="designation_c[<?php echo e($loop->index+1); ?>]" value="<?php echo e(getChamp('articles', 'id_article', $item->id_article , 'designation_c')); ?>" />
                        <input type="hidden" name="id_transaction[<?php echo e($loop->index+1); ?>]" value="<?php echo e(getChamp('transactions', 'id_magasin', $item->id_magasin , 'id_transaction')); ?>" />
-                       <input type="hidden" name="id_magasin[<?php echo e($loop->index+1); ?>]" value="<?php echo e($item->id_magasin); ?>" >
-                       <input type="hidden" name="id_user[<?php echo e($loop->index+1); ?>]" value="<?php echo e(getChamp('transactions', 'id_magasin', $item->id_magasin , 'id_user')); ?>" >
-                       <input type="hidden" name="id_typeTrans[<?php echo e($loop->index+1); ?>]" value="<?php echo e(getChamp('transactions', 'id_magasin', $item->id_magasin , 'id_typeTrans')); ?>" >
-                       <input type="hidden" name="id_paiement[<?php echo e($loop->index+1); ?>]" value="<?php echo e(getChamp('transactions', 'id_magasin', $item->id_magasin , 'id_paiement')); ?>" >
-                       <input type="hidden" name="quantiteV[<?php echo e($loop->index+1); ?>]" value="<?php echo e($item->quantite); ?>" >
+                       <input type="hidden" name="id_magasin" value="<?php echo e($item->id_magasin); ?>" >
+                       <input type="hidden" name="id_user" value="<?php echo e(getChamp('transactions', 'id_magasin', $item->id_magasin , 'id_user')); ?>" >
+                       <input type="hidden" name="id_typeTrans" value="<?php echo e(getChamp('transactions', 'id_magasin', $item->id_magasin , 'id_typeTrans')); ?>" >
+                       <input type="hidden" name="id_paiement" value="<?php echo e(getChamp('transactions', 'id_magasin', $item->id_magasin , 'id_paiement')); ?>" >
+                       <input type="hidden" name="quantiteV" value="<?php echo e($item->quantite); ?>" >
 
-											 <td><?php echo e($loop->index+1); ?></td>
+											 <td align="right"><?php echo e($loop->index+1); ?></td>
                        <td><?php echo e(getChamp('articles', 'id_article', $item->id_article , 'designation_c')); ?></td>
                        <td><?php echo e(getChamp('categories', 'id_categorie', getChamp('articles', 'id_article', $item->id_article, 'id_categorie') , 'libelle')); ?></td>
                        <td><?php echo e(getChamp('fournisseurs', 'id_fournisseur', getChamp('articles', 'id_article', $item->id_article, 'id_fournisseur') , 'libelle')); ?></td>
-                       <td><?php echo e(getChamp('articles', 'id_article', $item->id_article , 'prix_vente')); ?></td>
+                       <td align="right"><?php echo e(number_format(getChamp('articles', 'id_article', $item->id_article , 'prix_vente'),2,',','')); ?> DH</td>
 
-                       <td><?php echo e($item->quantite); ?></td>
-											 <td><input type="number" min="0" placeholder="Quantite" name="quantite[<?php echo e($loop->index+1); ?>]"  ></td>
+                       <td align="right"><?php echo e($item->quantite); ?></td>
+											 <td><input type="number" min="0" placeholder="Quantite" name="quantite[<?php echo e($loop->index+1); ?>]"  max="<?php echo e($item->quantite); ?>" ></td>
 											 <td>
 													 <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal<?php echo e($loop->index+1); ?>">Detail Article</button>
 											 </td>

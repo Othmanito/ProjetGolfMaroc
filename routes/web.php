@@ -120,9 +120,10 @@ Route::prefix('/vendeur')->group( function()
 
   //Route::get('/lister/{p_table}','VendeurController@lister')->name('vendeur.lister');
   //Afficher le formulaire d'Ajout de vente
-  Route::get('/vendeur/addFormVente/{p_id_trans}','VendeurController@addFormVente')->name('vendeur.addVente');
+  Route::get('/addFormVente/{p_id_mag}','VendeurController@addFormVente')->name('vendeur.addVente');
   //Valider l'ajout de la vente
-  Route::post('/vendeur/submitAddVente','VendeurController@submitAddVente')->name('vendeur.submitAddVente');
+  Route::post('/submitAddVente','VendeurController@submitAddVente')->name('vendeur.submitAddVente');
+  Route::get('/menu/{p_id_mag}','VendeurController@getMagasin')->name('vendeur.menu');
 
 
 

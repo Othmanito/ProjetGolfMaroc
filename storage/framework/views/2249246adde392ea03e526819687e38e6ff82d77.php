@@ -103,9 +103,9 @@
              <tr class="odd gradeA">
                <td><?php echo e($loop->index+1); ?></td>
                <td><?php echo e(getChamp('articles','id_article',$item->id_article, 'designation_c')); ?></td>
-               <td><?php echo e(getChamp('articles','id_article',$item->id_article, 'prix_vente')); ?> DH</td>
+               <td><?php echo e(number_format(getChamp('articles','id_article',$item->id_article, 'prix_vente'),2,',','')); ?> DH</td>
                <td><?php echo e($item->Taux*100); ?> %</td>
-               <td><?php echo e(getChamp('articles','id_article',$item->id_article, 'prix_vente')- (getChamp('articles','id_article',$item->id_article, 'prix_vente') * $item->Taux )); ?></td>
+               <td><?php echo e(number_format(getChamp('articles','id_article',$item->id_article, 'prix_vente')- (getChamp('articles','id_article',$item->id_article, 'prix_vente') * $item->Taux ),2,',','')); ?> DH</td>
                <td><?php echo e($item->description); ?> </td>
              </tr>
              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

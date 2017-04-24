@@ -96,9 +96,9 @@
              @else
              @foreach( $data as $item )
              <tr class="odd gradeA">
-               <td>{{ $loop->index+1 }}</td>
-               <td>{{ getDateHelper($item->created_at) }} </td>
-               <td>{{App\Models\Trans_Article::where(['id_transaction'=> $item->id_transaction ])->count()}}</td>
+               <td align="right">{{ $loop->index+1 }}</td>
+               <td align="right">{{ getDateHelper($item->created_at) }} </td>
+               <td align="right">{{App\Models\Trans_Article::where(['id_transaction'=> $item->id_transaction ])->count()}}</td>
                <td>{{ getChamp('mode_paiements','id_mode',getChamp('paiements', 'id_paiement', $item->id_paiement, 'id_mode') , 'libelle') }}</td>
                <td>
                  <a href="{{ Route('vendeur.details',['p_id' => $item->id_transaction  ]) }}" title="detail"><i class="glyphicon glyphicon-eye-open"></i></a>

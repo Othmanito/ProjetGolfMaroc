@@ -2,6 +2,8 @@
   <ul class="nav navbar-nav side-nav">
 
     <li><a href="<?php echo e(Route('vendeur.home')); ?>"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a></li>
+    <li><a href="<?php echo e(Route('vendeur.addVente',[ 'p_id_mag' =>getChamp('transactions', 'id_transaction', $data->first()->id_transaction , 'id_magasin') ])); ?>"><i class="fa fa-fw fa-plus"></i>  Ajouter une vente </a></li>
+
     <li><a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="glyphicon glyphicon-shopping-cart"></i> Gestion des Ventes <i class="fa fa-fw fa-caret-down"></i></a>
       <ul id="demo" class="collapse">
         <li><a href="<?php echo e(Route('vendeur.lister',['param' => 'transact','p_id_user'=>3 ])); ?>">Ventes du Magasin <span class="badge"><?php echo e(App\Models\Transaction::where(['id_typeTrans'=> 3,'id_user'=> 3 ])->count()); ?> </span></a></li>

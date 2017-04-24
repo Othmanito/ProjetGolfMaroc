@@ -99,11 +99,11 @@
              @else
              @foreach( $data as $item )
              <tr class="odd gradeA">
-               <td>{{ $loop->index+1 }}</td>
+               <td align="right">{{ $loop->index+1 }}</td>
                <td>{{ getChamp('articles','id_article',$item->id_article, 'designation_c') }}</td>
-               <td>{{ getChamp('articles','id_article',$item->id_article, 'prix_vente') }} DH</td>
-               <td>{{ $item->Taux*100 }} %</td>
-               <td>{{getChamp('articles','id_article',$item->id_article, 'prix_vente')- (getChamp('articles','id_article',$item->id_article, 'prix_vente') * $item->Taux )}}</td>
+               <td align="right">{{ number_format(getChamp('articles','id_article',$item->id_article, 'prix_vente'),2,',','') }} DH</td>
+               <td align="right">{{ $item->Taux*100 }} %</td>
+               <td align="right">{{ number_format(getChamp('articles','id_article',$item->id_article, 'prix_vente')- (getChamp('articles','id_article',$item->id_article, 'prix_vente') * $item->Taux ),2,',','')}} DH</td>
                <td>{{ $item->description }} </td>
              </tr>
              @endforeach

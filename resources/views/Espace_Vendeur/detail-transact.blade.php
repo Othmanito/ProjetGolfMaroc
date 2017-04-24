@@ -97,11 +97,11 @@
              @else
              @foreach( $data as $item )
              <tr class="odd gradeA">
-               <td>{{ $loop->index+1 }}</td>
+               <td align="right">{{ $loop->index+1 }}</td>
                <td>{{ getChamp('articles','id_article',$item->id_article, 'designation_c') }}</td>
-               <td>{{ getChamp('articles','id_article',$item->id_article, 'prix_vente') }} DH</td>
-               <td>{{ $item->quantite }}</td>
-               <td>{{ getChamp('articles','id_article',$item->id_article, 'prix_vente') * $item->quantite }} DH</td>
+               <td align="right">{{ number_format(getChamp('articles','id_article',$item->id_article, 'prix_vente'),2,',','') }} DH</td>
+               <td align="right">{{ $item->quantite }}</td>
+               <td align="right">{{ number_format(getChamp('articles','id_article',$item->id_article, 'prix_vente') * $item->quantite,2,',','') }} DH</td>
 
 
                <!--<td>
@@ -127,9 +127,9 @@
         <div class="col-lg-4"></div>
         <div class="col-lg-8">
           <a onclick="return alert('Printing ....')" type="button" class="btn btn-outline btn-default"><i class="fa fa-file-pdf-o" aria-hidden="true">  Imprimer </i></a>
-          <a href="{{ Route('vendeur.addVente',[ 'p_id_trans' => $data->first()->id_trans_Article ]) }}" type="button" class="btn btn-outline btn-default">  Ajouter une vente </a>
+        <!--  <a href="{{ Route('vendeur.addVente',[ 'p_id_mag' =>getChamp('transactions', 'id_transaction', $data->first()->id_transaction , 'id_magasin') ]) }}" type="button" class="btn btn-outline btn-default">  Ajouter une vente </a>
           <a href="{{ Route('vendeur.lister',[ 'p_table' => 'stocks','p_id_user'=>3 ]) }}" type="button" class="btn btn-outline btn-default">  Voir Stock </a>
-
+        -->
         </div>
       </div>
       <!-- row -->

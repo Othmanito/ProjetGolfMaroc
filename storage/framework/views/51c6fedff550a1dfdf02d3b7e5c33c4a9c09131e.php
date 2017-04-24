@@ -98,9 +98,9 @@
              <?php else: ?>
              <?php $__currentLoopData = $data; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
              <tr class="odd gradeA">
-               <td><?php echo e($loop->index+1); ?></td>
-               <td><?php echo e(getDateHelper($item->created_at)); ?> </td>
-               <td><?php echo e(App\Models\Trans_Article::where(['id_transaction'=> $item->id_transaction ])->count()); ?></td>
+               <td align="right"><?php echo e($loop->index+1); ?></td>
+               <td align="right"><?php echo e(getDateHelper($item->created_at)); ?> </td>
+               <td align="right"><?php echo e(App\Models\Trans_Article::where(['id_transaction'=> $item->id_transaction ])->count()); ?></td>
                <td><?php echo e(getChamp('mode_paiements','id_mode',getChamp('paiements', 'id_paiement', $item->id_paiement, 'id_mode') , 'libelle')); ?></td>
                <td>
                  <a href="<?php echo e(Route('vendeur.details',['p_id' => $item->id_transaction  ])); ?>" title="detail"><i class="glyphicon glyphicon-eye-open"></i></a>

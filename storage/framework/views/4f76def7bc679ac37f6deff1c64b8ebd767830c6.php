@@ -86,7 +86,7 @@
                     <a href="<?php echo e(Route('admin.home')); ?>">Administrateur</a>
                     <a href="<?php echo e(Route('direct.home')); ?>">Directeur</a>
                     <a href="">Magasinier</a>
-                    <a href="">Vendeur</a>
+                    <a href="<?php echo e(Route('vendeur.home')); ?>">Vendeur</a>
                 </div>
             </div>
         </div>

@@ -62,22 +62,23 @@ class VendeurController extends Controller
   //Afficher le formulaire d'Ajout de ventes
   public function addFormVente($p_id_mag)
   {
-    $trans = Trans_Article::where('id_trans_Article',$p_id_mag)->first();
+  //  $trans = Trans_Article::where('id_trans_Article',$p_id_mag)->first();
     $articles = collect( DB::select("call getArticlesForAjout(".$p_id_mag."); ") );
     $mode=collect( DB::select("call getMode(); ") );
+
     $alert1 = "";
 
     if( $articles == null )
       $alert1 = $alert1."<li>la base de données des articles est vide, veuillez ajouter les articles avant de procéder à la création des stocks.";
 
-    if( $trans == null )
-      $alert1 = $alert1."<li> La transaction choisi n\'existe pas .(veuillez choisir une autre transaction).";
+  //  if( $trans == null )
+    //  $alert1 = $alert1."<li> La transaction choisi n\'existe pas .(veuillez choisir une autre transaction).";
 
-    if( $articles ==null || $trans == null)
+    if( $articles ==null)
       return back()->withInput()->with('alert_warning',$alert1);
 
     else
-      return view('Espace_Vendeur.add-Vente_Magasin-form')->with(['data' => Stock::all(), 'articles' => $articles,  'trans' => $trans ,'mode'=>$mode]);
+      return view('Espace_Vendeur.add-Vente_Magasin-form')->with(['data' => Stock::all(), 'articles' => $articles,'mode'=>$mode]);
   }
 
 
@@ -85,8 +86,13 @@ class VendeurController extends Controller
 // Valider l'ajout des ventes du Magasin
 public function submitAddVente()
 {
-  //id du Transaction
- $id_trans_Article = request()->get('id_trans_Article');
+
+//Alertes et messages d'erreur
+  $alert1 = "";
+  $alert2 = "";
+  $error1 = false;
+  $error2 = false;
+  $nbre_articles = 0;
 
   //array des element du formulaire
   $id_article   	= request()->get('id_article');
@@ -94,29 +100,52 @@ public function submitAddVente()
   $quantiteV     	= request()->get('quantiteV');
   $prix_vente     = request()->get('prix_vente');
   $quantite       = request()->get('quantite');
-  $id_transaction = request()->get('id_transaction');
+
   $id_magasin     = request()->get('id_magasin');
   $id_user   	    = request()->get('id_user');
   $id_typeTrans   = request()->get('id_typeTrans');
-  $id_paiement    =  request()->get('id_paiement');
+  //$id_paiement    =  collect(DB::select("call getPaiementID(); "));
   $id_mode        = request()->get('mode');
 
 
+  //test pour recuperer la derniere ligne de transaction et lui ajouter 1 si elle n'était pas nulle
+  $last_transaction = Transaction::all()->last();
+  if($last_transaction->id_transaction==null)
+  $id=1;
+  else {
+    $id=$last_transaction->id_transaction+1;
+  }
+//test pour recuperer la derniere ligne de l'id paiement et lui ajouter 1 si elle n'était pas nulle
+$id_paiement = Paiement::all()->last();
+if($id_paiement->id_paiement==null)
+$id_p=1;
+else {
+  $id_p=$id_paiement->id_paiement+1;
+}
 
-  $alert1 = "";
-  $alert2 = "";
-  $error1 = false;
-  $error2 = false;
-  $nbre_articles = 0;
+//Insertion d'une transaction et d'un paiement
+$item2=new Transaction;
+$item3=new Paiement;
 
+$item3->id_paiement=$id_p;
+$item3->id_mode=$id_mode;
+
+$item2->id_transaction=$id;
+$item2->id_magasin=$id_magasin;
+$item2->id_user=$id_user;
+$item2->id_typeTrans=$id_typeTrans;
+$item2->id_paiement=$id_p;
+
+try{
+$item3->save();
+$item2->save();
+} catch (Exception $e) { $error2 = true; $alert2 = $alert2."<li>Erreur d'ajout de la vente ayant l'id : <b>".$id."</b> Message d'erreur: ".$e->getMessage().". ";}
+
+
+
+//Boucle d'ajout des articles dans trans_article
   for( $i=1; $i<=count($id_article) ; $i++ )
   {
-
-    if( $quantite[$i]> $quantiteV[$i] )
-    {
-      $alert1 = $alert1."<li><b> La quantité vendu de l'article ".$designation_c[$i]."</b>: est supérieure à la quantité en stock : veuillez inserer une nouvelle quantité !";
-      $error1 = true;
-    }
 
     if( $quantite[$i] == null )
     {
@@ -127,28 +156,14 @@ public function submitAddVente()
     if( $quantite[$i]!=null )
     {
       $item = new Trans_Article;
-      $item2=new Transaction;
-      $item3=new Paiement;
-      //$item->id_trans_Article    = $id_trans_Article;
       $item->id_article    = $id_article[$i];
-      $item->id_transaction= $id_transaction[$i];
+      $item->id_transaction= $id;
       $item->quantite      = $quantite[$i];
-
-    //  $item2->id_transaction=$id_transaction;
-      $item2->id_magasin=$id_magasin[$i];
-      $item2->id_user=$id_user[$i];
-      $item2->id_typeTrans=$id_typeTrans[$i];
-      $item2->id_paiement=$id_paiement[$i];
-
-      //$item3->id_paiement=$id_paiement;
-      $item3->id_mode=$id_mode;
-
 
       try
       {
+
         $item->save();
-        $item2->save();
-        $item3->save();
         $nbre_articles++;
       } catch (Exception $e) { $error2 = true; $alert2 = $alert2."<li>Erreur d'ajout de la vente d'article: <b>".$designation_c[$i]."</b> Message d'erreur: ".$e->getMessage().". ";}
     }
@@ -160,7 +175,12 @@ public function submitAddVente()
     back()->withInput()->with('alert_danger',$alert2);
 
   return redirect()->back()->with('alert_success','L\'ajout de la vente s\'est effectué avec succès. Le nombre d\'articles est : '.$nbre_articles);
-
-
 }
+
+
+public function getMagasin($p_id_mag){
+$data = collect( DB::select("call getArticlesForAjout(".$p_id_mag."); ") );
+  return view('Espace_Vendeur._nav_menu_2')->with(['data' => $data]);
+}
+
 }

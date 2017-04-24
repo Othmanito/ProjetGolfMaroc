@@ -186,6 +186,7 @@ table {
 td,
 th {
   padding: 0;
+
 }
 /*! Source: https://github.com/h5bp/html5-boilerplate/blob/master/src/css/main.css */
 @media print {
@@ -2486,6 +2487,7 @@ table th[class*="col-"] {
   .table-responsive > .table-bordered > tbody > tr:last-child > td,
   .table-responsive > .table-bordered > tfoot > tr:last-child > td {
     border-bottom: 0;
+    
   }
 }
 fieldset {
