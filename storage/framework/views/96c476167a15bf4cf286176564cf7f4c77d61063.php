@@ -116,11 +116,24 @@
                                                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                     </select>
 
-                                                </div></div></div>
+                                                </div></div>
+
+<div class="col-lg-5">
+    <?php $__currentLoopData = $mode; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $mo): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+  <?php if($mo->id_mode==1): ?>
+  <label>Reference chequier</label>
+  <input class="form-control" type="text" min="0" placeholder="Refchequier" name="ref" ></input>
+  
+  <?php endif; ?>
+<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                              </div>
+
+
+
 
                     <?php echo e(csrf_field()); ?>
 
-                    
+
 
 
 								 <table class="table table-striped table-bordered table-hover" id="example">

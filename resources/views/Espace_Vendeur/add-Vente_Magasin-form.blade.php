@@ -114,7 +114,20 @@
                                                           @endforeach
                                                     </select>
 
-                                                </div></div></div>
+                                                </div></div>
+
+<div class="col-lg-5">
+    @foreach( $mode as $mo )
+  @if($mo->id_mode==1)
+  <label>Reference chequier</label>
+  <input class="form-control" type="text" min="0" placeholder="Refchequier" name="ref" ></input>
+  
+  @endif
+@endforeach
+                                              </div>
+
+
+
 
                     {{ csrf_field() }}
 
