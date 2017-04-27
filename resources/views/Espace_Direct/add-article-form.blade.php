@@ -164,6 +164,12 @@
 									<input type="text" class="form-control" placeholder="Couleur" name="couleur" value="{{ old('couleur')  }}">
 								</div>
 							</div>
+							<div class="col-lg-5">
+							<div class="form-group">
+
+                                <label>Image de l'article</label>
+                                <input type="file" class="form-control">
+                            </div></div>
 
 							<div class="col-lg-2">
 								{{-- Prix vente --}}

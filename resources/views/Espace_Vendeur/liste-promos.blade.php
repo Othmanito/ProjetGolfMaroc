@@ -85,11 +85,11 @@
 	       <table class="table table-striped table-bordered table-hover" id="example">
 
            <thead bgcolor="#DBDAD8">
-             <tr><th width="2%"> # </th><th>Article</th><th>Prix de vente</th><th>Taux</th><th>Prix en Promotion</th><th>Description de la promotion</th></tr>
+             <tr><th width="2%"> # </th><th>Article</th><th>Prix de vente</th><th>Taux</th><th>Prix en Promotion</th> <th>Date debut</th><th>Date fin</th></tr>
            </thead>
 
            <tfoot bgcolor="#DBDAD8">
-             <tr><th width="2%"> # </th><th>Article</th><th>Prix de vente</th><th>Taux</th><th>Prix en Promotion</th><th>Description de la promotion</th>></tr>
+             <tr><th width="2%"> # </th><th>Article</th><th>Prix de vente</th><th>Taux</th><th>Prix en Promotion</th><th>Date debut</th><th>Date fin</th></tr>
            </tfoot>
 
            <tbody>
@@ -104,7 +104,8 @@
                <td align="right">{{ number_format(getChamp('articles','id_article',$item->id_article, 'prix_vente'),2,',','') }} DH</td>
                <td align="right">{{ $item->Taux*100 }} %</td>
                <td align="right">{{ number_format(getChamp('articles','id_article',$item->id_article, 'prix_vente')- (getChamp('articles','id_article',$item->id_article, 'prix_vente') * $item->Taux ),2,',','')}} DH</td>
-               <td>{{ $item->description }} </td>
+               <td>{{ getDateHelper($item->date_debut) }} </td>
+               <td>{{ getDateHelper($item->date_fin) }}</td>
              </tr>
              @endforeach
              @endif

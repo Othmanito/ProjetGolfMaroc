@@ -26,7 +26,7 @@
                                           </div>
                                           <div class="col-xs-9 text-right">
                                               <div class="huge"><?php echo e(App\Models\Transaction::where(['id_typeTrans'=> 3,'id_user'=> 3 ])->count()); ?></div>
-                                              <div>Ventes</div>
+                                              <div>Ventes établies</div>
                                           </div>
                                       </div>
                                   </div>
@@ -49,8 +49,8 @@
                                                             <i class="glyphicon glyphicon-gift fa-5x"></i>
                                                         </div>
                                                         <div class="col-xs-9 text-right">
-                                                            <div class="huge"><?php echo e(App\Models\Promotion::where(['id_magasin'=> 2])->count()); ?></div>
-                                                            <div>Promotions</div>
+                                                            <div class="huge"><?php echo e(App\Models\Promotion::where(['id_magasin'=> 2,'isActive'=>1])->count()); ?></div>
+                                                            <div>Promotions disponibles</div>
                                                         </div>
                                                     </div>
                                                 </div>

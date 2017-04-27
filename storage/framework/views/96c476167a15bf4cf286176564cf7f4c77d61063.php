@@ -118,15 +118,16 @@
 
                                                 </div></div>
 
-<div class="col-lg-5">
-    <?php $__currentLoopData = $mode; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $mo): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-  <?php if($mo->id_mode==1): ?>
-  <label>Reference chequier</label>
-  <input class="form-control" type="text" min="0" placeholder="Refchequier" name="ref" ></input>
-  
-  <?php endif; ?>
-<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                              </div>
+                                          <div class="col-lg-5">
+                                              <?php $__currentLoopData = $mode; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $mo): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <?php if($mo->id_mode==1): ?>
+                                            <label>Reference chequier</label>
+                                            <input class="form-control" type="text" min="0" placeholder="Refchequier" name="ref" ></input>
+
+                                            <?php endif; ?>
+                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                              </div>
 
 
 
@@ -138,10 +139,10 @@
 
 								 <table class="table table-striped table-bordered table-hover" id="example">
 									 <thead bgcolor="#DBDAD8">
-										 <tr><th width="2%"> # </th><th width="25%">Article</th><th>Categorie</th><th>Fournisseur</th><th>Prix de vente</th><th>Quantite en stock</th><th>Quantité vendue</th><th width="10%">Autres</th></tr>
+										 <tr><th width="2%"> # </th><th width="25%"></th><th width="25%">Article</th><th>Categorie</th><th>Fournisseur</th><th>Prix de vente</th><th>Quantite en stock</th><th>Quantité vendue</th><th width="10%">Autres</th></tr>
 									 </thead>
 									 <tfoot bgcolor="#DBDAD8">
-										 <tr><th width="2%"> # </th><th width="25%">Article</th><th>Categorie</th><th>Fournisseur</th><th>Prix de vente</th><th>Quantité en stock</th><th>Quantité vendue</th><th width="10%">Autres</th></tr>
+										 <tr><th width="2%"> # </th><th width="25%"></th><th width="25%">Article</th><th>Categorie</th><th>Fournisseur</th><th>Prix de vente</th><th>Quantité en stock</th><th>Quantité vendue</th><th width="10%">Autres</th></tr>
 									 </tfoot>
 
 									 <tbody>
@@ -163,6 +164,7 @@
                        <input type="hidden" name="quantiteV" value="<?php echo e($item->quantite); ?>" >
 
 											 <td align="right"><?php echo e($loop->index+1); ?></td>
+                        <td><?php echo e(getChamp('articles', 'id_article', $item->id_article , 'image')); ?></td>
                        <td><?php echo e(getChamp('articles', 'id_article', $item->id_article , 'designation_c')); ?></td>
                        <td><?php echo e(getChamp('categories', 'id_categorie', getChamp('articles', 'id_article', $item->id_article, 'id_categorie') , 'libelle')); ?></td>
                        <td><?php echo e(getChamp('fournisseurs', 'id_fournisseur', getChamp('articles', 'id_article', $item->id_article, 'id_fournisseur') , 'libelle')); ?></td>
@@ -189,6 +191,7 @@
 															 <p><b>sexe</b> <?php echo e(getSexeName(getChamp('articles', 'id_article', $item->id_article , 'sexe'))); ?></p>
 															 <p><b>Prix d'achat</b> <?php echo e(getChamp('articles', 'id_article', $item->id_article , 'prix_achat')); ?></p>
 															 <p><b>Prix de vente</b> <?php echo e(getChamp('articles', 'id_article', $item->id_article , 'prix_vente')); ?></p>
+
 															 <p><?php echo e(getChamp('articles', 'id_article', $item->id_article , 'designation_l')); ?></p>
 
 														 </div>

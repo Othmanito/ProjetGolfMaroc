@@ -87,11 +87,11 @@
 	       <table class="table table-striped table-bordered table-hover" id="example">
 
            <thead bgcolor="#DBDAD8">
-             <tr><th width="2%"> # </th><th>Article</th><th>Prix de vente</th><th>Taux</th><th>Prix en Promotion</th><th>Description de la promotion</th></tr>
+             <tr><th width="2%"> # </th><th>Article</th><th>Prix de vente</th><th>Taux</th><th>Prix en Promotion</th> <th>Date debut</th><th>Date fin</th></tr>
            </thead>
 
            <tfoot bgcolor="#DBDAD8">
-             <tr><th width="2%"> # </th><th>Article</th><th>Prix de vente</th><th>Taux</th><th>Prix en Promotion</th><th>Description de la promotion</th>></tr>
+             <tr><th width="2%"> # </th><th>Article</th><th>Prix de vente</th><th>Taux</th><th>Prix en Promotion</th><th>Date debut</th><th>Date fin</th></tr>
            </tfoot>
 
            <tbody>
@@ -101,12 +101,13 @@
              <?php else: ?>
              <?php $__currentLoopData = $data; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
              <tr class="odd gradeA">
-               <td><?php echo e($loop->index+1); ?></td>
+               <td align="right"><?php echo e($loop->index+1); ?></td>
                <td><?php echo e(getChamp('articles','id_article',$item->id_article, 'designation_c')); ?></td>
-               <td><?php echo e(number_format(getChamp('articles','id_article',$item->id_article, 'prix_vente'),2,',','')); ?> DH</td>
-               <td><?php echo e($item->Taux*100); ?> %</td>
-               <td><?php echo e(number_format(getChamp('articles','id_article',$item->id_article, 'prix_vente')- (getChamp('articles','id_article',$item->id_article, 'prix_vente') * $item->Taux ),2,',','')); ?> DH</td>
-               <td><?php echo e($item->description); ?> </td>
+               <td align="right"><?php echo e(number_format(getChamp('articles','id_article',$item->id_article, 'prix_vente'),2,',','')); ?> DH</td>
+               <td align="right"><?php echo e($item->Taux*100); ?> %</td>
+               <td align="right"><?php echo e(number_format(getChamp('articles','id_article',$item->id_article, 'prix_vente')- (getChamp('articles','id_article',$item->id_article, 'prix_vente') * $item->Taux ),2,',','')); ?> DH</td>
+               <td><?php echo e(getDateHelper($item->date_debut)); ?> </td>
+               <td><?php echo e(getDateHelper($item->date_fin)); ?></td>
              </tr>
              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
              <?php endif; ?>

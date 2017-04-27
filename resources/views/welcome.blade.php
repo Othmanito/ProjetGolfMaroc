@@ -4,21 +4,27 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <title>Laravel</title>
+<link rel="shortcut icon" href="{{{ asset('images/golfmaroc.png') }}}">
+        <title>Golf Maroc</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
 
         <!-- Styles -->
         <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
+
+            html {
+
                 font-family: 'Raleway', sans-serif;
                 font-weight: 100;
                 height: 100vh;
                 margin: 0;
+
+                -webkit-background-size: cover;
+                -moz-background-size: cover;
+                -ms-background-size: cover;
+                -o-background-size: cover;
+                background-size: cover;
             }
 
             .full-height {
@@ -50,13 +56,17 @@
             }
 
             .links > a {
-                color: #636b6f;
-                padding: 0 25px;
-                font-size: 12px;
+                color: black;
+                hover:green;
+                padding: 0 20px;
+                font-size: 25px;
                 font-weight: 600;
                 letter-spacing: .1rem;
                 text-decoration: none;
                 text-transform: uppercase;
+            }
+            .links > a:hover {
+              background-color: #7FFF00;
             }
 
             .m-b-md {
@@ -78,9 +88,11 @@
             @endif
 
             <div class="content">
-                <div class="title m-b-md">
-                    GolfMaroc
-                </div>
+
+                <img src="images/logo.png" alt="Golf Maroc"></img>
+
+
+
 
                 <div class="links">
                     <a href="{{ Route('admin.home') }}">Administrateur</a>

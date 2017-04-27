@@ -28,6 +28,8 @@ if( !function_exists('getSexeName') )
 		switch ($value) {
 			case 'h': return 'Homme'; break;
 			case 'f': return 'Femme'; break;
+			case 'H': return 'Homme'; break;
+			case 'F': return 'Femme'; break;
 			default:  return '-'; 		break;
 		}
 	}

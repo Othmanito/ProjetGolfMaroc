@@ -91,13 +91,13 @@
            </tfoot>
 
            <tbody>
-             @if ( isset( $data ) )
+
              @if( $data->isEmpty() )
              <tr><td colspan="4">Aucune vente</td></tr>
              @else
              @foreach( $data as $item )
              <tr class="odd gradeA">
-               <td align="right">{{ $loop->index+1 }}</td>
+               <td align="right" width=1%>{{ $loop->index+1 }}</td>
                <td>{{ getChamp('articles','id_article',$item->id_article, 'designation_c') }}</td>
                <td align="right">{{ number_format(getChamp('articles','id_article',$item->id_article, 'prix_vente'),2,',','') }} DH</td>
                <td align="right">{{ $item->quantite }}</td>
@@ -112,7 +112,7 @@
              </tr>
              @endforeach
              @endif
-             @endif
+
 
            </tbody>
          </table>
@@ -124,12 +124,13 @@
 
       <!-- row -->
       <div class="row">
-        <div class="col-lg-4"></div>
-        <div class="col-lg-8">
-          <a onclick="return alert('Printing ....')" type="button" class="btn btn-outline btn-default"><i class="fa fa-file-pdf-o" aria-hidden="true">  Imprimer </i></a>
-        <!--  <a href="{{ Route('vendeur.addVente',[ 'p_id_mag' =>getChamp('transactions', 'id_transaction', $data->first()->id_transaction , 'id_magasin') ]) }}" type="button" class="btn btn-outline btn-default">  Ajouter une vente </a>
-          <a href="{{ Route('vendeur.lister',[ 'p_table' => 'stocks','p_id_user'=>3 ]) }}" type="button" class="btn btn-outline btn-default">  Voir Stock </a>
-        -->
+
+        <div class="col-lg-12">
+          <center><a onclick="return alert('Printing ....')" type="button" class="btn btn-outline btn-primary"><i class="fa fa-file-pdf-o" aria-hidden="true">  Imprimer </i></a><center>
+        <!-- <a href="{{ Route('vendeur.addVente',[ 'p_id_mag' =>getChamp('transactions', 'id_transaction', $data->first()->id_transaction , 'id_magasin') ]) }}" type="button" class="btn btn-outline btn-default">  Ajouter une vente </a>
+
+        <a href="{{ Route('vendeur.lister',[ 'p_table' => 'stocks','p_id_user'=>3 ]) }}" type="button" class="btn btn-outline btn-default">  Voir Stock </a>
+  -->
         </div>
       </div>
       <!-- row -->
